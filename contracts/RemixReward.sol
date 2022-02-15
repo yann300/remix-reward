@@ -5,14 +5,14 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
+contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-
+    
     mapping (string => bool) types;
 
     mapping (uint => TokenData) tokensData;
@@ -25,6 +25,8 @@ contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     }
 
     constructor() ERC721("Remix", "R") {
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+
         types["Educator"] = true;
         types["Release Manager"] = true;
         types["Team Member"] = true;
@@ -33,15 +35,18 @@ contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         types["Contributor"] = true;
     }
 
-    function addType (string calldata tokenType) public onlyOwner {
+    function addType (string calldata tokenType) public {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
         types[tokenType] = true;
     }
 
-    function removeType (string calldata tokenType) public onlyOwner {
+    function removeType (string calldata tokenType) public {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
         delete types[tokenType];
     }
 
-    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public onlyOwner {
+    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
         require(types[tokenType], "type should be declared");
         require(bytes(payload).length != 0, "payload can't be empty");
         
@@ -81,7 +86,7 @@ contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable, AccessControl)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
