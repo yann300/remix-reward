@@ -12,7 +12,7 @@ contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-    
+
     mapping (string => bool) types;
 
     mapping (uint => TokenData) tokensData;
