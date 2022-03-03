@@ -13,6 +13,15 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     CountersUpgradeable.Counter private _tokenIdCounter;
+    mapping (string => bool) types;
+    mapping (uint => TokenData) tokensData;
+    mapping (address => uint) allowedMinting;
+
+    struct TokenData {
+        string payload;
+        string tokenType;
+        string hash;
+    }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
@@ -21,6 +30,14 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         __ERC721_init("Remix", "R");
         __Ownable_init();
         __UUPSUpgradeable_init();
+
+        // intialize default values
+        types["Educator"] = true;
+        types["Release Manager"] = true;
+        types["Team Member"] = true;
+        types["User"] = true;
+        types["Beta Tester"] = true;
+        types["Contributor"] = true;
     }
 
     function _authorizeUpgrade(address newImplementation)
@@ -28,6 +45,41 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         onlyOwner
         override
     {}
+
+    function addType (string calldata tokenType) public onlyOwner {
+        types[tokenType] = true;
+    }
+
+    function removeType (string calldata tokenType) public onlyOwner {
+        delete types[tokenType];
+    }
+
+    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public onlyOwner {
+        require(types[tokenType], "type should be declared");
+        require(bytes(payload).length != 0, "payload can't be empty");
+        
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        tokensData[tokenId].payload = payload;
+        tokensData[tokenId].tokenType = tokenType;
+        tokensData[tokenId].hash = hash;
+        
+        if (grantMinting) {
+            allowedMinting[to]++;
+        }
+    }
+
+    function publicMint (address to) public {
+        require(allowedMinting[msg.sender] > 0, "no minting allowed");
+        allowedMinting[msg.sender]--;
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+
+        // tokensData[tokenId].payload = "";
+        tokensData[tokenId].tokenType = "User";
+    }
 
     // The following functions are overrides required by Solidity.
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
