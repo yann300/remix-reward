@@ -35,18 +35,15 @@ contract Remix is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
         types["Contributor"] = true;
     }
 
-    function addType (string calldata tokenType) public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
+    function addType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         types[tokenType] = true;
     }
 
-    function removeType (string calldata tokenType) public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
+    function removeType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         delete types[tokenType];
     }
 
-    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "only admin");
+    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public onlyRole(DEFAULT_ADMIN_ROLE) {
         require(types[tokenType], "type should be declared");
         require(bytes(payload).length != 0, "payload can't be empty");
         
