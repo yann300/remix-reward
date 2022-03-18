@@ -15,16 +15,18 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     CountersUpgradeable.Counter private _tokenIdCounter;
     mapping (string => bool) types;
     mapping (uint => TokenData) tokensData;
-    mapping (address => uint) allowedMinting;
+    mapping (address => uint) public allowedMinting;
 
     struct TokenData {
         string payload;
         string tokenType;
-        string hash;
+        bytes hash;
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
+    constructor() initializer {
+        initialize();
+    }
 
     function initialize() initializer public {
         __ERC721_init("Remix", "R");
@@ -54,7 +56,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         delete types[tokenType];
     }
 
-    function safeMint(address to, string calldata tokenType, string calldata payload, string calldata hash, bool grantMinting) public onlyOwner {
+    function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyOwner {
         require(types[tokenType], "type should be declared");
         require(bytes(payload).length != 0, "payload can't be empty");
         
@@ -65,8 +67,8 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         tokensData[tokenId].tokenType = tokenType;
         tokensData[tokenId].hash = hash;
         
-        if (grantMinting) {
-            allowedMinting[to]++;
+        if (mintGrant > 0) {
+            allowedMinting[to] = allowedMinting[to] + mintGrant;
         }
     }
 
