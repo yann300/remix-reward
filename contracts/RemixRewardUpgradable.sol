@@ -8,8 +8,9 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721BurnableUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
+contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721BurnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     CountersUpgradeable.Counter private _tokenIdCounter;
@@ -30,8 +31,12 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     function initialize() initializer public {
         __ERC721_init("Remix", "R");
-        __Ownable_init();
+        __ERC721Enumerable_init();
+        __ERC721Burnable_init();
+        __AccessControl_init();
         __UUPSUpgradeable_init();
+        
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
         // intialize default values
         types["Educator"] = true;
@@ -44,19 +49,19 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     function _authorizeUpgrade(address newImplementation)
         internal
-        onlyOwner
+        onlyRole(DEFAULT_ADMIN_ROLE)
         override
     {}
 
-    function addType (string calldata tokenType) public onlyOwner {
+    function addType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         types[tokenType] = true;
     }
 
-    function removeType (string calldata tokenType) public onlyOwner {
+    function removeType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         delete types[tokenType];
     }
 
-    function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyOwner {
+    function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
         require(types[tokenType], "type should be declared");
         require(bytes(payload).length != 0, "payload can't be empty");
         
@@ -96,7 +101,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable, AccessControlUpgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
