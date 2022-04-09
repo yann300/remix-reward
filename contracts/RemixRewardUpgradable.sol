@@ -10,6 +10,9 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721Burnab
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
+/**
+ * @custom:dev-run-script ./scripts/deploy.js
+ */
 contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721BurnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
