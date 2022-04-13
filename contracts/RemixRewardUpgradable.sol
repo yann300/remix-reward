@@ -18,7 +18,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     CountersUpgradeable.Counter private _tokenIdCounter;
     mapping (string => bool) types;
-    mapping (uint => TokenData) tokensData;
+    mapping (uint => TokenData) public tokensData;
     mapping (address => uint) public allowedMinting;
 
     struct TokenData {
@@ -28,9 +28,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {
-        initialize();
-    }
+    constructor() initializer {}
 
     function initialize() initializer public {
         __ERC721_init("Remix", "R");
@@ -40,14 +38,6 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         __UUPSUpgradeable_init();
         
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-
-        // intialize default values
-        types["Educator"] = true;
-        types["Release Manager"] = true;
-        types["Team Member"] = true;
-        types["User"] = true;
-        types["Beta Tester"] = true;
-        types["Contributor"] = true;
     }
 
     function _authorizeUpgrade(address newImplementation)
