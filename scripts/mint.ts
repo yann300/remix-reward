@@ -1,5 +1,5 @@
 import * as multihash from 'multihashes'
-const ethers = require('ethers');
+import { ethers } from 'ethers'
 
 const toHex = (ipfsHash) => {
     let buf = multihash.fromB58String(ipfsHash);
@@ -22,9 +22,9 @@ async function main() {
         let contract = new ethers.Contract(address, remixV1.interface, signer);
 
         const to = ''
-        const tokenType = 'Devconnector'
-        const payload = 'Amsterdam'
-        const hash = toHex('QmXLDsUfVV1VoJS42HbWJ2CkjT7H6FqLqkay17shwXa4Th')
+        const tokenType = 'Beta Tester'
+        const payload = 'v0.24.0'
+        const hash = toHex('QmSg1zpxPcgCryNok8J9KRHa7jouuj99nxZPcc7t7MnoMY')
         const mintGrant = 1
         
         const txSafeMint = await contract.safeMint(to, tokenType, payload, hash, mintGrant)

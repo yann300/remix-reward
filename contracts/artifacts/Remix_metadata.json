@@ -314,6 +314,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "contributorHash",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -606,7 +619,7 @@
 					},
 					{
 						"internalType": "bytes",
-						"name": "_data",
+						"name": "data",
 						"type": "bytes"
 					}
 				],
@@ -629,6 +642,19 @@
 					}
 				],
 				"name": "setApprovalForAll",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "hash",
+						"type": "bytes"
+					}
+				],
+				"name": "setContributorHash",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -847,7 +873,7 @@
 					"details": "Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}."
 				},
 				"grantRole(bytes32,address)": {
-					"details": "Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role."
+					"details": "Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleGranted} event."
 				},
 				"hasRole(bytes32,address)": {
 					"details": "Returns `true` if `account` has been granted `role`."
@@ -865,10 +891,10 @@
 					"details": "Implementation of the ERC1822 {proxiableUUID} function. This returns the storage slot used by the implementation. It is used to validate that the this implementation remains valid after an upgrade. IMPORTANT: A proxy pointing at a proxiable contract should not be considered proxiable itself, because this risks bricking a proxy that upgrades to it, by delegating to itself until out of gas. Thus it is critical that this function revert if invoked through a proxy. This is guaranteed by the `notDelegated` modifier."
 				},
 				"renounceRole(bytes32,address)": {
-					"details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `account`."
+					"details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `account`. May emit a {RoleRevoked} event."
 				},
 				"revokeRole(bytes32,address)": {
-					"details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role."
+					"details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event."
 				},
 				"safeTransferFrom(address,address,uint256)": {
 					"details": "See {IERC721-safeTransferFrom}."
@@ -929,11 +955,11 @@
 	},
 	"sources": {
 		"@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol": {
-			"keccak256": "0x5addc7dca2366b164c9befa35da22e9081c44bf6c4c8dce4269be43516f8916e",
+			"keccak256": "0x2ea9f206854c98b67dd228f8cad22bfe90ba7b1c2295315672f2e1e244623fc3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://94aa0da913b24beae8db8180c28b894981568c7ed558136401977f115f40bade",
-				"dweb:/ipfs/QmYSMnuMzfs5zemQJ8EYkBd42sWxnEv5kAf4EEik91HryE"
+				"bzz-raw://b4a7ef6774a9acbbb01583a9fc4656ee9b3dae4b8d5099f480625bfc0af68a02",
+				"dweb:/ipfs/QmeXZcdZ7FELTc21GSgjRHXFCj4ohxrsZUaNzA5cMemAbE"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol": {
@@ -945,11 +971,11 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
-			"keccak256": "0x652fee292f698d8dba81bf287cb71f1682f6483b67ebe601a5f7387dcfc30b34",
+			"keccak256": "0x247c62047745915c0af6b955470a72d1696ebad4352d7d3011aef1a2463cd888",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://98c7bba29bcab7240cdaada7dd7cbe3529fec83314801270c46239e72a9e84d7",
-				"dweb:/ipfs/QmfHCc1KMygjXchXVwafWTkFjhbb2SQ3Cu5GzRTdV4CCCh"
+				"bzz-raw://d7fc8396619de513c96b6e00301b88dd790e83542aab918425633a5f7297a15a",
+				"dweb:/ipfs/QmXbP4kiZyp7guuS7xe8KaybnwkRPGrBc2Kbi3vhcTfpxb"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol": {
@@ -977,11 +1003,11 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
-			"keccak256": "0x7454006cccb737612b00104d2f606d728e2818b778e7e55542f063c614ce46ba",
+			"keccak256": "0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6ec10894beb0f7537fba35e501fd1c5d35440e8c8f5ced1b8e57722a1d0879a8",
-				"dweb:/ipfs/Qmbc3bNmtDewTGSmrPD93Ubp8saAz8xCxsgTjSmpNTqukz"
+				"bzz-raw://6eb2fd1e9894dbe778f4b8131adecebe570689e63cf892f4e21257bfe1252497",
+				"dweb:/ipfs/QmXgUGNfZvrn6N2miv3nooSs7Jm34A41qz94fu2GtDFcx8"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol": {
@@ -993,11 +1019,11 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol": {
-			"keccak256": "0xa9ee8ba9953f4339e308abde06d64195b81852b5c605cfb738582a03ddf20099",
+			"keccak256": "0x5331c8909221d9f9f3851cfadd5959d0873413a2c27e30e0f2fa234158c1c6cf",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0326e91c5a4a229c3af44aa97b8f68d5a9f40dfc897d9703820db0348534b153",
-				"dweb:/ipfs/QmcP9w63QY4zZpBkW4jo2Qo3gH5BvATEp2S9FK4LLCijcW"
+				"bzz-raw://31c7d52f47a9174e236c0402654f42c16516c58c6851862f3bcb1b440b873498",
+				"dweb:/ipfs/QmZQqiofa8jPJCCAfWyjNnBuoGXrR56Ct4HyW4ugRWfvCb"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol": {
@@ -1009,19 +1035,19 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol": {
-			"keccak256": "0x5d3b80a09c746aed89446a14d0e8f5ba5212520360d00a495a2156a7a51497e5",
+			"keccak256": "0x016298e66a5810253c6c905e61966bb31c8775c3f3517bf946ff56ee31d6c005",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dfaceeb9548fa36e2af1e69cbc2bd5a8ba2b06ec62accba64fc123e1e0f120a1",
-				"dweb:/ipfs/QmcF1kFRotifj9QBqhqNATaRQhQ6aoDAhSEEoKMc9VdKu3"
+				"bzz-raw://1723de5ae414f210db039b19e6487c19c2d643483c9be7c445cf481a80c199d2",
+				"dweb:/ipfs/QmcBLbmPdZsNngYhA1KDadNUqQZoGACytFWuUH74RC4AXC"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol": {
-			"keccak256": "0x417a6f201d6b0e3872979beca22f173ca518ef826fafb23b8d5b93bf7e42192d",
+			"keccak256": "0xa7dbff7171ac06a023a5ca52c2138ac711037b2146b9197a52e5de4f9183e04d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3ccc2bdaacf5e5cd18d3d5424e9eb118ff9e59485011595381869af89665c579",
-				"dweb:/ipfs/QmdPps2gVGqktfANjoxyU93ridF86vpppp7HNoiJkDzksm"
+				"bzz-raw://77dec5f0117e876e485db228ec24a29b0e8215bf94762bfcc80fec670c5fad97",
+				"dweb:/ipfs/Qmf1iZ7jqNWgGFs5zwrKVinZ8RsCZjzufqhE7zDnEgam5x"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol": {
@@ -1049,11 +1075,11 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
-			"keccak256": "0x55cf2bd9fc76704ddcdc19834cd288b7de00fc0f298a40ea16a954ae8991db2d",
+			"keccak256": "0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://37e4df53c8d2e3c1062c1c7b2c17366db7de03bfd2559d340ca95c588aa49c2f",
-				"dweb:/ipfs/QmQ9vsG3o4wED3FRogiSUhdzJvZSjjYFtydzXvFEJtgZk4"
+				"bzz-raw://9b4b2110b7f2b3eb32951bc08046fa90feccffa594e1176cb91cdfb0e94726b4",
+				"dweb:/ipfs/QmSxLwYjicf9zWFuieRc8WQwE4FisA1Um5jp1iSa731TGt"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
@@ -1073,19 +1099,19 @@
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/utils/StorageSlotUpgradeable.sol": {
-			"keccak256": "0x422c3d27d0d5681cea93acbb0dcb175fa5b461b5b7731da7ff77e51f0f0174c7",
+			"keccak256": "0x09864aea84f01e39313375b5610c73a3c1c68abbdc51e5ccdd25ff977fdadf9a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://feb47206935cf956f60ffd76b8bad047102c7acbf2aab10157a235b7af66fa39",
-				"dweb:/ipfs/QmZQ39kpPhCdN9fyZ7BMwnK26tHjiP6QZDeL8tMSPDjxan"
+				"bzz-raw://aedb48081190fa828d243529ce25c708202c7d4ccfe99f0e4ecd6bc0cfcd03f3",
+				"dweb:/ipfs/QmWyiDQHPZA56iqsAwTmiJoxvNeRQLUVr4gTfzpdpXivpo"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol": {
-			"keccak256": "0x398d3323c1932a5986bf36be7c57593e121e69d5db5b6574b4ee0d031443de37",
+			"keccak256": "0xea5339a7fff0ed42b45be56a88efdd0b2ddde9fa480dc99fef9a6a4c5b776863",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8b268304e03daf22c349abe3c318bc6a6badd6542d62311716ab401eec745f78",
-				"dweb:/ipfs/QmNYy2sc2RoTjDhyT6HAibmeDGqfhDiDpsWRbHFHoGVHLr"
+				"bzz-raw://841619682637df5579b4c396d281d6c55b26f1b1acce1d0ab67bead5e39cf60c",
+				"dweb:/ipfs/QmNRtuKp43ZHJwswdyT3GivY4fDMvz3cxBe1FfDthG1JGj"
 			]
 		},
 		"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol": {
@@ -1105,11 +1131,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x9109cf666e2ad664f06b0906810361c26c4569fecdd438ce7d35054df2b9d5d7",
+			"keccak256": "0x52e1a8bc7f628950ccede6f1b15b6bd2e0d5a5fff940615c4420c1774d9cb03e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://318e58c0b97ebdbc6a03d14df1a8e52944200818743e5ad4944faa3f66f1a126",
-				"dweb:/ipfs/QmYkc44wwXjPn5ikmvzPzsVGLPDrg3UkCM4gF9YCByj2yq"
+				"bzz-raw://c2967ba417ec8a57fe574620c2f4c0ca29dd2a6bf2de41c361c470f60ba3144b",
+				"dweb:/ipfs/QmUiUAVfnCB8vrGibWDwYiP2oC2H9YmWbg6avwSqVUtgjq"
 			]
 		}
 	},

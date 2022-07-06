@@ -20,6 +20,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     mapping (string => bool) types;
     mapping (uint => TokenData) public tokensData;
     mapping (address => uint) public allowedMinting;
+    bytes public contributorHash;
 
     struct TokenData {
         string payload;
@@ -54,6 +55,10 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         delete types[tokenType];
     }
 
+    function setContributorHash(bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        contributorHash = hash;
+    }
+
     function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
         require(types[tokenType], "type should be declared");
         require(bytes(payload).length != 0, "payload can't be empty");
@@ -78,7 +83,8 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         _safeMint(to, tokenId);
 
         // tokensData[tokenId].payload = "";
-        tokensData[tokenId].tokenType = "User";
+        tokensData[tokenId].tokenType = "Remixer";
+        tokensData[tokenId].hash = contributorHash;
     }
 
     // The following functions are overrides required by Solidity.
