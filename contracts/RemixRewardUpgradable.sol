@@ -87,6 +87,10 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         tokensData[tokenId].hash = contributorHash;
     }
 
+    function version () public pure returns (string memory) {
+        return "2.0.0";
+    }
+
     // The following functions are overrides required by Solidity.
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
