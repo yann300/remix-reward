@@ -6,7 +6,7 @@
 
 //import { ethers } from "hardhat";
 
-const ethers = require('ethers');
+const { ethers } = require('ethers');
 const { expect } = require('chai');
 
 let remix
@@ -24,6 +24,8 @@ describe("Basic remix reward deploy", function () {
 
   it("Should mint a badge", async function () {
     const [owner, betatester, user] = await ethers.getSigners();
+    const txAddType = await remix.addType('Beta Tester')
+    await txAddType.wait()
     const ipfsHash = '0xabcd1234'
     const mint = await remix.safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)
     await mint.wait()
