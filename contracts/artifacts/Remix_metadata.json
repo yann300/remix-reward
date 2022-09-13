@@ -301,6 +301,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "baseURI",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -642,6 +655,19 @@
 					}
 				],
 				"name": "setApprovalForAll",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_uri",
+						"type": "string"
+					}
+				],
+				"name": "setBaseURI",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1144,11 +1170,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x4a61c1e512ef813b56e249b6938e02d5eff0751770c82d97ccda69cc6affc43c",
+			"keccak256": "0x287f89a3f0e6e7a216107735d305207461f254ac0c2af38566e5bd521345dd07",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7e108bf0e7068877e858318436440d1ebe2c0df78c19106a310463d82e9a9ef3",
-				"dweb:/ipfs/QmZqfFnktHVbJLS6bX36Brj3mweUTxqkLcQm6vtuMzJ4nf"
+				"bzz-raw://edf165698e5925b19ea9a8e0cad9b1885bf75857941a4997f7ad48e9901146da",
+				"dweb:/ipfs/QmbV7f1KtLLHYyLEuvjVAA4FPNtidodtMaxPgfuKdvdweS"
 			]
 		}
 	},

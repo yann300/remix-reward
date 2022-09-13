@@ -21,6 +21,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     mapping (uint => TokenData) public tokensData;
     mapping (address => uint) public allowedMinting;
     bytes public contributorHash;
+    string public baseURI;
 
     struct TokenData {
         string payload;
@@ -39,6 +40,19 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         __UUPSUpgradeable_init();
         
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
+
+    function setBaseURI (string calldata _uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        baseURI = _uri;
+    }
+
+    /**
+     * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
+     * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
+     * by default, can be overridden in child contracts.
+     */
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
     }
 
     function _authorizeUpgrade(address newImplementation)
