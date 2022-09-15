@@ -39,7 +39,6 @@ describe("Basic remix reward deploy", function () {
     } catch (e) {
       console.log(e.message)
     }
-    
   });
 
   it("Should re-mint a badge", async function () {
