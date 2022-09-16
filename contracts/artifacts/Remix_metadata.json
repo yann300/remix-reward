@@ -284,6 +284,24 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "hash",
+						"type": "bytes"
+					}
+				],
+				"name": "assignHash",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -1170,11 +1188,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x287f89a3f0e6e7a216107735d305207461f254ac0c2af38566e5bd521345dd07",
+			"keccak256": "0x336fdd4b1972f9674b50e2f76460d11e9efa39951703f3cd0c8d9da60a7cdc77",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://edf165698e5925b19ea9a8e0cad9b1885bf75857941a4997f7ad48e9901146da",
-				"dweb:/ipfs/QmbV7f1KtLLHYyLEuvjVAA4FPNtidodtMaxPgfuKdvdweS"
+				"bzz-raw://301d8635d2bf2ad294708c49cc00835e37805f8ea13538116a7a04953600071b",
+				"dweb:/ipfs/QmQrNYJ2rpPrLRrBcQnbo4MyuhS2HcjbfxtHWgTkbx3WDn"
 			]
 		}
 	},

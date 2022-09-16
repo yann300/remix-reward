@@ -89,6 +89,12 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         }
     }
 
+    function assignHash(uint tokenId, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _requireMinted(tokenId);
+        require(tokensData[tokenId].hash.length == 0, "hash already set");
+        tokensData[tokenId].hash = hash;
+    }
+
     function publicMint (address to) public {
         require(allowedMinting[msg.sender] > 0, "no minting allowed");
         allowedMinting[msg.sender]--;
