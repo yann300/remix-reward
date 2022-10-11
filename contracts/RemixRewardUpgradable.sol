@@ -107,6 +107,12 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         tokensData[tokenId].hash = contributorHash;
     }
 
+    function grantRemixersMinting (address[] calldata remixers, uint amount) public  {
+        for (uint k = 0; k < remixers.length; k++) {
+            allowedMinting[remixers[k]] += amount;
+        }
+    }
+
     function version () public pure returns (string memory) {
         return "2.1.0";
     }

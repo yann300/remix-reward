@@ -398,6 +398,24 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address[]",
+						"name": "remixers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "grantRemixersMinting",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -1005,7 +1023,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -1188,11 +1206,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x336fdd4b1972f9674b50e2f76460d11e9efa39951703f3cd0c8d9da60a7cdc77",
+			"keccak256": "0x00c777ef536c766f168d63f0b7b596661fb35554bba0afbc3f0332c6c9263bb4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://301d8635d2bf2ad294708c49cc00835e37805f8ea13538116a7a04953600071b",
-				"dweb:/ipfs/QmQrNYJ2rpPrLRrBcQnbo4MyuhS2HcjbfxtHWgTkbx3WDn"
+				"bzz-raw://8859f4f6cccdb5432933d886d2af65a71f30745b71c582c4f4a693d05adaecc8",
+				"dweb:/ipfs/QmXL6s2EbtUPmZ8kjqvMveUQWxjtNM6iz6fWCTWLDMLdzV"
 			]
 		}
 	},
