@@ -1,4 +1,3 @@
-import * as multihash from 'multihashes'
 import { ethers } from 'ethers'
 
 async function main() {
