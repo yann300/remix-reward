@@ -1214,11 +1214,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x95ec3cdd85d17c753a1ee81a6a7d3b0972676666032311dd69916b3f630b7504",
+			"keccak256": "0x0a7008cba8245379e386d511bf31fa16330dd6d0c593862c72f2111599489450",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://483d7d85e5133111962b171d7d1db86623d5885515e03277abe77236236075b7",
-				"dweb:/ipfs/QmPoJF65PBgtWQJxjH7CUVRkHEYUjqh2S5DwmyfZ8QckrH"
+				"bzz-raw://ab22cdc5c9238d8e7ca1ad668f57eb3c5ff399fc3a8ce1a0ddbaaae3aba83cad",
+				"dweb:/ipfs/QmdU4Xg7uKi9GVPhMJ8m6PX9Q7xrY15nw35tv7q2PeEWrP"
 			]
 		}
 	},
