@@ -135,4 +135,13 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     {
         return super.supportsInterface(interfaceId);
     }
+
+    function _beforeConsecutiveTokenTransfer(
+        address from,
+        address to,
+        uint256 first,
+        uint96 size
+    ) internal virtual override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
+        super._beforeConsecutiveTokenTransfer(from, to, first, size);
+    }
 }
