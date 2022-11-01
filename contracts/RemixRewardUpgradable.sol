@@ -75,7 +75,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
         require(types[tokenType], "type should be declared");
-        require(bytes(payload).length != 0, "payload can't be empty");
+        // require(bytes(payload).length != 0, "payload can't be empty");
         
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
@@ -107,7 +107,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         tokensData[tokenId].hash = contributorHash;
     }
 
-    function grantRemixersMinting (address[] calldata remixers, uint amount) public  {
+    function grantRemixersMinting (address[] calldata remixers, uint amount) public onlyRole(DEFAULT_ADMIN_ROLE)  {
         for (uint k = 0; k < remixers.length; k++) {
             allowedMinting[remixers[k]] += amount;
         }
@@ -134,14 +134,5 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
-    }
-
-    function _beforeConsecutiveTokenTransfer(
-        address from,
-        address to,
-        uint256 first,
-        uint96 size
-    ) internal virtual override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
-        super._beforeConsecutiveTokenTransfer(from, to, first, size);
-    }
+    }    
 }
