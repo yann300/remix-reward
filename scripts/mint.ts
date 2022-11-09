@@ -22,9 +22,9 @@ async function main() {
         let contract = new ethers.Contract(address, remixV1.interface, signer);
 
         const to = ''
-        const tokenType = 'Beta Tester'
-        const payload = 'v0.24.0'
-        const hash = toHex('QmSg1zpxPcgCryNok8J9KRHa7jouuj99nxZPcc7t7MnoMY')
+        const tokenType = 'UX Champion'
+        const payload = ''
+        const hash = toHex('QmR8LoznRZ7CHTxgye6uGmEyNraLcFrV6PZjA1BtqjqzPH')
         const mintGrant = 1
         
         const txSafeMint = await contract.safeMint(to, tokenType, payload, hash, mintGrant)
