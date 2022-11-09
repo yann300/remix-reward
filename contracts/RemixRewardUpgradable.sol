@@ -108,7 +108,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         mintRemixer(to);
     }
 
-    function mintRemixer(address to) internal onlyRole(DEFAULT_ADMIN_ROLE) {
+    function mintRemixer(address to) internal {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
@@ -133,7 +133,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         require(zkVerifier != address(0), "no challenge started");
         
         bytes memory nullifier = abi.encodePacked(zkVerifier, input[2]);
-        bytes memory publisher = abi.encodePacked(zkVerifier, msg.sender);        
+        bytes memory publisher = abi.encodePacked(zkVerifier, msg.sender);
         require(nullifiers[nullifier] == 0, "proof already published");
         require(publishers[publisher] == 0, "current published has already submitted");
         require(zkChallenge[0] == input[0], "provided challenge is not valid");
