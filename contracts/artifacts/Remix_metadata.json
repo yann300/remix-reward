@@ -502,9 +502,9 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "bytes",
 						"name": "",
-						"type": "uint256"
+						"type": "bytes"
 					}
 				],
 				"name": "nullifiers",
@@ -637,12 +637,25 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
+						"internalType": "bytes",
 						"name": "",
-						"type": "address"
+						"type": "bytes"
 					}
 				],
 				"name": "publishers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "publishersAmount",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -828,6 +841,11 @@
 						"internalType": "uint256[2]",
 						"name": "challenge",
 						"type": "uint256[2]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "max",
+						"type": "uint256"
 					}
 				],
 				"name": "setChallenge",
@@ -1072,6 +1090,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "zkMax",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "zkVerifier",
 				"outputs": [
 					{
@@ -1183,7 +1214,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 400
+			"runs": 200
 		},
 		"remappings": []
 	},
@@ -1372,11 +1403,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0xab18aec20a3fd124a1316e25c359f7f28f2685f41ff9b0274aeca1d2563ebcc9",
+			"keccak256": "0xd51b0deac3cef7e114e9cc32c92dc4cace54d0200b66b101535cc089f8e1eb25",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f627c201e6eacffc9e84bfb359d4281904b7f57a938a86ff2577ebcce361b0b0",
-				"dweb:/ipfs/Qma87skMAs1a34tKKAvPZ7yasDbYkYK3ZsqCDfZUgzjsiD"
+				"bzz-raw://554e802ecd656958432021538b82fab6c5518fe4eeae2d4b742f75ddfe97fbd9",
+				"dweb:/ipfs/QmZqtvur165nT7Uxr1wFAe2Rb8Cbmz3ig3G7A2MqwdkUwG"
 			]
 		}
 	},

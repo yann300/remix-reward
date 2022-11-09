@@ -27,6 +27,8 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     
     address public zkVerifier;
     uint[2] public zkChallenge;
+    uint public zkMax;
+    uint public publishersAmount;
     mapping (bytes => uint) public nullifiers;
     mapping (bytes => uint) public publishers;
 
@@ -124,14 +126,16 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         }
     }
 
-    function setChallenge(address verifier, uint[2] calldata challenge) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+    function setChallenge(address verifier, uint[2] calldata challenge, uint max) public onlyRole(DEFAULT_ADMIN_ROLE)  {
         zkVerifier = verifier;
         zkChallenge = challenge;
+        zkMax = max;
+        publishersAmount = 0;
     }
 
     function publishChallenge (ZKVerifier.Proof memory proof, uint[3] memory input) public {
         require(zkVerifier != address(0), "no challenge started");
-        
+        require(publishersAmount <= zkMax, "publishers reached maximum amount");
         bytes memory nullifier = abi.encodePacked(zkVerifier, input[2]);
         bytes memory publisher = abi.encodePacked(zkVerifier, msg.sender);
         require(nullifiers[nullifier] == 0, "proof already published");
@@ -149,9 +153,10 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         
         require(verified, "the provided proof isn't valid");        
         mintRemixer(msg.sender);
+        publishersAmount++;
 
         nullifiers[nullifier] = 1;
-        publishers[publisher] = 1;
+        publishers[publisher] = 1;        
     }
 
     function version () public pure returns (string memory) {
