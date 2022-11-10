@@ -137,7 +137,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     function publishChallenge (ZKVerifier.Proof memory proof, uint[3] memory input) public {
         require(zkVerifier != address(0), "no challenge started");
-        require(publishersAmount <= zkMax, "publishers reached maximum amount");
+        require(publishersAmount < zkMax, "publishers reached maximum amount");
         bytes memory nullifier = abi.encodePacked(zkChallengeNonce, input[2]);
         bytes memory publisher = abi.encodePacked(zkChallengeNonce, msg.sender);
         require(nullifiers[nullifier] == 0, "proof already published");
@@ -151,9 +151,10 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         );
         
         require(success, "the call to the verifier failed");
-        (bool verified) = abi.decode(data, (bool));
-        
+
+        (bool verified) = abi.decode(data, (bool));        
         require(verified, "the provided proof isn't valid");        
+        
         mintRemixer(msg.sender);
         publishersAmount++;
 
