@@ -1090,6 +1090,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "zkChallengeNonce",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "zkMax",
 				"outputs": [
 					{
@@ -1403,11 +1416,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0xd51b0deac3cef7e114e9cc32c92dc4cace54d0200b66b101535cc089f8e1eb25",
+			"keccak256": "0x25efb44b96fd17135533b63caed279f4a529902c952ebbdbeccfe37545a9205c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://554e802ecd656958432021538b82fab6c5518fe4eeae2d4b742f75ddfe97fbd9",
-				"dweb:/ipfs/QmZqtvur165nT7Uxr1wFAe2Rb8Cbmz3ig3G7A2MqwdkUwG"
+				"bzz-raw://87b3eab2933e0453cc672df0cf58f06c19dc2dc69040553b0ad713a7e316a303",
+				"dweb:/ipfs/QmXUdN1iwhtXvZyWKb7dB4RbhPNXNBeiEDAeT9UnQznj3S"
 			]
 		}
 	},

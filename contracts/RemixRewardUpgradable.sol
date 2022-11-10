@@ -27,6 +27,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     
     address public zkVerifier;
     uint[2] public zkChallenge;
+    uint public zkChallengeNonce;
     uint public zkMax;
     uint public publishersAmount;
     mapping (bytes => uint) public nullifiers;
@@ -131,13 +132,14 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         zkChallenge = challenge;
         zkMax = max;
         publishersAmount = 0;
+        zkChallengeNonce++;
     }
 
     function publishChallenge (ZKVerifier.Proof memory proof, uint[3] memory input) public {
         require(zkVerifier != address(0), "no challenge started");
         require(publishersAmount <= zkMax, "publishers reached maximum amount");
-        bytes memory nullifier = abi.encodePacked(zkVerifier, input[2]);
-        bytes memory publisher = abi.encodePacked(zkVerifier, msg.sender);
+        bytes memory nullifier = abi.encodePacked(zkChallengeNonce, input[2]);
+        bytes memory publisher = abi.encodePacked(zkChallengeNonce, msg.sender);
         require(nullifiers[nullifier] == 0, "proof already published");
         require(publishers[publisher] == 0, "current published has already submitted");
         require(zkChallenge[0] == input[0], "provided challenge is not valid");
