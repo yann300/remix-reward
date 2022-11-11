@@ -4,47 +4,43 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-//import { ethers } from "hardhat";
+import { ethers } from "ethers";
+import { expect } from "chai";
 
-const { ethers } = require('ethers');
-const { expect } = require('chai');
-
-let remix
-let verifier
+let remix: ethers.Contract
+let proxy: ethers.Contract
+let verifier: ethers.Contract
 describe("Basic remix reward deploy", function () {
   it("Deploy with proxy", async function () {
-    try {
-      const [owner, betatester, user] = await ethers.getSigners();
-      const Remix = await ethers.getContractFactory("Remix");
-      
-      remix = await Remix.connect(owner).deploy();
-      await remix.deployed();
+    const [owner, betatester, user] = await ethers.getSigners();
 
-      const implAddress = remix.address
+    const Remix = await ethers.getContractFactory("Remix");    
+    remix = await Remix.connect(owner).deploy();
+    await remix.deployed()
 
-      const Proxy = await ethers.getContractFactory('ERC1967Proxy')
-      remix = await Proxy.connect(owner).deploy(implAddress, '')
-      console.log("Remix reward deployed to:", remix.address);
-      
-      expect(await remix.name()).to.equal('Remix');
-    } catch (e) {
-      console.log(e)
-    }
+    const implAddress = remix.address
+    console.log('implementation address', implAddress)
+
+    const Proxy = await ethers.getContractFactory('ERC1967Proxy')
+    proxy = await Proxy.connect(owner).deploy(implAddress, '0x8129fc1c')
+    await proxy.deployed()
+    console.log("Remix reward deployed to:", proxy.address);
+
+    remix = await ethers.getContractAt("Remix", proxy.address)
+    remix = remix.connect(owner)
+
+    expect(await remix.name()).to.equal('Remix');
   });
 
   it("Should mint a badge", async function () {
-    try {
-      const [owner, betatester, user] = await ethers.getSigners();
-      const ipfsHash = '0xabcd1234'
-      const txAddType = await remix.addType('Beta Tester')
-      await txAddType.wait()
-      const mint = await remix.safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)
-      await mint.wait()
-      expect((await remix.allowedMinting(betatester.address))).to.equal(2);
-      expect((await remix.allowedMinting(user.address))).to.equal(0);
-    } catch (e) {
-      console.log(e.message)
-    }
+    const [owner, betatester, user] = await ethers.getSigners();
+    const ipfsHash = '0xabcd1234'
+    const txAddType = await remix.addType('Beta Tester')
+    await txAddType.wait()
+    const mint = await remix.safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)
+    await mint.wait()
+    expect((await remix.allowedMinting(betatester.address))).to.equal(2);
+    expect((await remix.allowedMinting(user.address))).to.equal(0);
   });
 
   it("Should re-mint a badge", async function () {

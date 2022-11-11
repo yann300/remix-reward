@@ -18,9 +18,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"tests/contracts/verifier.sol": "Pairing"
+			"contracts/Proof.sol": "ZKVerifier"
 		},
-		"evmVersion": "byzantium",
+		"evmVersion": "london",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -32,11 +32,11 @@
 		"remappings": []
 	},
 	"sources": {
-		"tests/contracts/verifier.sol": {
-			"keccak256": "0x0ef180c498043c5f5568541c99ba8723c6513d58b8f9cd2457d41ab6bea69f17",
+		"contracts/Proof.sol": {
+			"keccak256": "0xa43b93e3acf8404fc7031d07e28d99a50ac56543f6687afd23c4c746992177dd",
 			"urls": [
-				"bzz-raw://0f532080abda2af79c72e545ee16299ef15f4afec7add0cc1575074fa490c10a",
-				"dweb:/ipfs/Qmb2eWHyz8RF3xyYy3X6KUJXmCdYwUM1H7egvvDT9UKGwn"
+				"bzz-raw://d49d37871b46ca5576979ed98508c339eb1db7b1e8913c9e896dd47a74771fe9",
+				"dweb:/ipfs/QmTkTSy6uErNc8SPR5mHzuQ7WatASVfwF4Ajr4d7xYpY28"
 			]
 		}
 	},

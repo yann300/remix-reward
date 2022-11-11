@@ -40,7 +40,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
+    constructor() {}
 
     function initialize() initializer public {
         __ERC721_init("Remix", "R");

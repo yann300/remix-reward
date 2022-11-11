@@ -98,7 +98,7 @@
 		"compilationTarget": {
 			"tests/contracts/verifier.sol": "Verifier"
 		},
-		"evmVersion": "london",
+		"evmVersion": "byzantium",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"

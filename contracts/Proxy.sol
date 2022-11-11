@@ -1,1 +1,1 @@
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import "@openzeppelin/contracts@4.7.3/proxy/ERC1967/ERC1967Proxy.sol";
