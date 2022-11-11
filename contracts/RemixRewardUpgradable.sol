@@ -111,7 +111,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         mintRemixer(to);
     }
 
-    function mintRemixer(address to) internal {
+    function mintRemixer(address to) private {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
