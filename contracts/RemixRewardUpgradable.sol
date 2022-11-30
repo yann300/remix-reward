@@ -32,7 +32,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     uint public publishersAmount;
     mapping (bytes => uint) public nullifiers;
     mapping (bytes => uint) public publishers;
-    
+
     string public zkChallengeTokenType;
     string public zkChallengePayload;
     bytes public zkChallengeHash;

@@ -1,31 +1,23 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-import hre from "hardhat";
+import { ethers } from "ethers";
 
 async function main() {
-  const RemixV1 = await hre.ethers.getContractFactory("RemixUUPSV1");
-  const v1ProxyUUPS = await hre.upgrades.deployProxy(RemixV1, [], {
-    kind: "uups",
-  });
+    const [owner] = await ethers.getSigners();
 
-  await v1ProxyUUPS.deployed();
-  console.log("Remix reward deployed to Ropsten:", v1ProxyUUPS.address);
+    const Remix = await ethers.getContractFactory("Remix");    
+    const remix = await Remix.connect(owner).deploy();
+    await remix.deployed()
 
-  setTimeout(async () => {
-    const RemixV2 = await hre.ethers.getContractFactory("RemixUUPSV2");
-    const v2ProxyUUPS = await hre.upgrades.upgradeProxy(v1ProxyUUPS, RemixV2);
+    const implAddress = remix.address
+    console.log('implementation address', implAddress)
 
-    await v2ProxyUUPS.deployed();
-    console.log("Upgrade successful!", v1ProxyUUPS);
-  }, 10000);
+    const Proxy = await ethers.getContractFactory('ERC1967Proxy')
+    const proxy = await Proxy.connect(owner).deploy(implAddress, '0x8129fc1c')
+    await proxy.deployed()
+    console.log("Remix reward deployed to:", proxy.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+  console.error(error)
 });
