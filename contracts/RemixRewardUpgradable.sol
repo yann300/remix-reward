@@ -26,12 +26,16 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     string public baseURI;
     
     address public zkVerifier;
-    uint[2] public zkChallenge;
+    uint[2] public zkChallenge;    
     uint public zkChallengeNonce;
     uint public zkMax;
     uint public publishersAmount;
     mapping (bytes => uint) public nullifiers;
     mapping (bytes => uint) public publishers;
+    
+    string public zkChallengeTokenType;
+    string public zkChallengePayload;
+    bytes public zkChallengeHash;
 
     struct TokenData {
         string payload;
@@ -83,7 +87,11 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         contributorHash = hash;
     }
 
-    function safeMint(address to, string calldata tokenType, string calldata payload, bytes calldata hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function safeMint(address to, string memory tokenType, string memory payload, bytes memory hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        mintBadge(to, tokenType, payload, hash, mintGrant);
+    }
+
+    function mintBadge(address to, string memory tokenType, string memory payload, bytes memory hash, uint mintGrant) private {
         require(types[tokenType], "type should be declared");
         // require(bytes(payload).length != 0, "payload can't be empty");
         
@@ -127,9 +135,13 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         }
     }
 
-    function setChallenge(address verifier, uint[2] calldata challenge, uint max) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+    function setChallenge(address verifier, uint[2] calldata challenge, uint max, string calldata tokenType, string calldata payload, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+        addType(tokenType);
         zkVerifier = verifier;
         zkChallenge = challenge;
+        zkChallengeTokenType = tokenType;
+        zkChallengePayload = payload;
+        zkChallengeHash = hash;
         zkMax = max;
         publishersAmount = 0;
         zkChallengeNonce++;
@@ -155,7 +167,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         (bool verified) = abi.decode(data, (bool));        
         require(verified, "the provided proof isn't valid");        
         
-        mintRemixer(msg.sender);
+        mintBadge(msg.sender, zkChallengeTokenType, zkChallengePayload, zkChallengeHash, 1);
         publishersAmount++;
 
         nullifiers[nullifier] = 1;
