@@ -98,12 +98,15 @@ describe("Basic remix reward deploy", function () {
   const proof3 = [[["0x184bf659e78249d8f6b875740354a8229474eef4e039fa005e0c94cf6d18730f","0x1dd379512de86bee64452ecb344776b5ef5e79773a9dec01e32729181bd17b96"],[["0x05bfbff5b2d026c9d64cbff625f11e54136158b84ade02801af157d09c6b1825","0x0acecff510657e4a4dee8fd125d56eb0aa45ba2be7d80eee97eb2269c4dc8451"],["0x179f3c91af951fedf7b216d92f695fad45470a104ae525c3d8d576e072d562bb","0x2f3ba787cac75c2c3489d8940712c8b4c033311a985149c9b4d965da02e9e2ef"]],["0x11e80b75b4f61f0f0cfc9e325bf5219827996048cdfbd8e051359bf3e766c48d","0x04aa461b439182429664d76dbab3f50c73e37fef2435feb1915bae99e8d33da3"]],["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc","0x0000000000000000000000000000000000000000000000000000000000002276"]]
   const proof4 = [[["0x28c44fe20ea2346f270b004004ca41acf16002c76e77e7c6b3fa37bb98766fb4","0x2504d286b705ff28fd86e70c1da1479cfa6f3c17ad1dc1ea57f6bc455df74097"],[["0x063bec5006614c76259388347ba0b4e5e0f3e67b36bdfc0a10fdf5b7b88242e3","0x24254541318be4ae435cb44b278c6d3a7a533968054d7107812facae8799e5ae"],["0x060259403134eaa2354b48e878679d6b2e1df3ba7d213ef62ee63bb7db10bf56","0x05f98dd3ee68a17b5cb418f4b4681658e73c1c5ed0f819fea12df85f10a975c0"]],["0x1c18b42785fbd83d87050f6352f8543e6aee6f907a6e1be2b218764923f3ab96","0x23507955e5596e8f9f6c29d82b5764ac3094ab2414abe4360d075c4e063580cc"]],["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc","0x00000000000000000000000000000000000000000000000000000000000d7670"]]
   const challengeHashes = ['281969979063453985172741380982846584566', '88422393177988462612949727007266787516']
+  const tokenType = 'remix challenge'
+  const payload = 'no payload'
+  const hash = '0xabababcdef12'
 
   it("Should set a new challenge", async function () {
     const [owner, betatester, user, betatester2] = await ethers.getSigners();
     
     console.log("verifier address", verifier.address)
-    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3);
+    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
     await setChallengeTx.wait()
   })
 
@@ -119,6 +122,12 @@ describe("Basic remix reward deploy", function () {
 
     const publishChallengeTx = await remix.connect(betatester2).publishChallenge(proof1[0], proof1[1])
     await publishChallengeTx.wait()
+    const balance = await remix.connect(betatester2).balanceOf(betatester2.address)
+    const tokenId = await remix.connect(betatester2).tokenOfOwnerByIndex(betatester2.address, balance - 1)
+    const tokenData = await remix.connect(betatester2).tokensData(tokenId)    
+    expect(tokenData.payload).to.be.equal(payload)
+    expect(tokenData.tokenType).to.be.equal(tokenType)
+    expect(tokenData.hash).to.be.equal(hash)
   });
 
   it("Should refuse a challenge if proof has already been published", async function () {    
@@ -150,7 +159,7 @@ describe("Basic remix reward deploy", function () {
     const [owner, betatester, user, betatester2] = await ethers.getSigners();
     
     console.log("verifier address", verifier.address)
-    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3);
+    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
     await setChallengeTx.wait()
   })
 

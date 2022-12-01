@@ -846,6 +846,21 @@
 						"internalType": "uint256",
 						"name": "max",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tokenType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "payload",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "hash",
+						"type": "bytes"
 					}
 				],
 				"name": "setChallenge",
@@ -1090,12 +1105,51 @@
 			},
 			{
 				"inputs": [],
+				"name": "zkChallengeHash",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "zkChallengeNonce",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "zkChallengePayload",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "zkChallengeTokenType",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -1417,11 +1471,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x6cca28c418ab399b7822ae524aaa2d2e900f56cdfa509d7f9ffc10a0b37bd296",
+			"keccak256": "0x4579716cce89fb2437aa8c05b1ccff0d5f4ad7edcb6a9c7cf2a0e9e008281754",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4d0664f98fd712e48a343e218bf643b220160874c690e082a99d5dddb3a6cc37",
-				"dweb:/ipfs/QmWPhAW2MMtsXyJXx7W2czn7TaK1tEc9HfUFnaAiE5otjC"
+				"bzz-raw://30e8872795d12a07cfcfcbf690bdb0b8de2618564739b764a52c0b469d0c7f16",
+				"dweb:/ipfs/QmR9n9199yRKhDAZTDNYGj5K72HREfY76gjyJscfvSoGk3"
 			]
 		}
 	},
