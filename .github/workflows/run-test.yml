@@ -1,0 +1,20 @@
+name: sol-test-js
+on: [push]
+
+jobs:
+  run_sample_test_job:
+    runs-on: ubuntu-latest
+    name: A job to run solidity tests in js
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Environment Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.17.6
+      - name: Run SUT Action
+        uses: ioedeveloper/eth-ts-test@v0.11.10-dev
+        with:
+          test-path: 'tests'
+          contract-path: 'contracts'
+          compiler-version: '0.8.7'
