@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 14.17.6
       - name: Run SUT Action
-        uses: EthereumRemix/ts-sol-test@v0.1.4-dev
+        uses: EthereumRemix/ts-sol-test@v0.1.5-dev
         with:
           test-path: 'tests/test.ts'
           contract-path: 'contracts'
