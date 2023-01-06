@@ -1,1 +1,1 @@
-import "@openzeppelin/contracts@4.8.0/proxy/ERC1967/ERC1967Proxy.sol";
+import "@openzeppelin/contracts@4.7.3/proxy/ERC1967/ERC1967Proxy.sol";
