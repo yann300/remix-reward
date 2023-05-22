@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 20.0.0
       - name: Run SUT Action
-        uses: yann300/ts-sol-test@add_logs
+        uses: EthereumRemix/ts-sol-test@main
         with:
           test-path: 'tests/test.ts'
           contract-path: 'contracts'
