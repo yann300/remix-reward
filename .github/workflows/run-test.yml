@@ -11,9 +11,9 @@ jobs:
       - name: Environment Setup
         uses: actions/setup-node@v3
         with:
-          node-version: 14.17.6
+          node-version: 20.0.0
       - name: Run SUT Action
-        uses: EthereumRemix/ts-sol-test@EthereumRemix-patch-1
+        uses: EthereumRemix/ts-sol-test@main
         with:
           test-path: 'tests/test.ts'
           contract-path: 'contracts'
