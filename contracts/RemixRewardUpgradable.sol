@@ -13,39 +13,56 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "./Proof.sol";
 
 /**
- * @custom:dev-run-script ./scripts/deploy.js
+ * @title Remix Contract
+ * @dev A contract for managing the minting, publishing, and challenges of remix tokens.
  */
 contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721BurnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    // Counter for generating token IDs
     CountersUpgradeable.Counter private _tokenIdCounter;
-    mapping (string => bool) types;
-    mapping (uint => TokenData) public tokensData;
-    mapping (address => uint) public allowedMinting;
+
+    // Mapping to track supported token types
+    mapping(string => bool) types;
+
+    // Mapping to store token data
+    mapping(uint => TokenData) public tokensData;
+
+    // Mapping to track minting permissions of addresses
+    mapping(address => uint) public allowedMinting;
+
+    // Contributor hash
     bytes public contributorHash;
+
+    // Base URI for token metadata
     string public baseURI;
-    
+
+    // ZKVerifier contract address
     address public zkVerifier;
-    uint[2] public zkChallenge;    
+
+    // ZKChallenge data
+    uint[2] public zkChallenge;
     uint public zkChallengeNonce;
     uint public zkMax;
     uint public publishersAmount;
-    mapping (bytes => uint) public nullifiers;
-    mapping (bytes => uint) public publishers;
+    mapping(bytes => uint) public nullifiers;
+    mapping(bytes => uint) public publishers;
 
+    // Current ZKChallenge token type, payload, and hash
     string public zkChallengeTokenType;
     string public zkChallengePayload;
     bytes public zkChallengeHash;
 
+    // Structure for storing token data
     struct TokenData {
         string payload;
         string tokenType;
         bytes hash;
     }
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {}
-
+    /**
+     * @dev Initializes the Remix contract.
+     */
     function initialize() initializer public {
         __ERC721_init("Remix", "R");
         __ERC721Enumerable_init();
@@ -56,44 +73,74 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function setBaseURI (string calldata _uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    /**
+     * @dev Sets the base URI for token metadata.
+     * @param _uri The base URI to set.
+     */
+    function setBaseURI(string calldata _uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
         baseURI = _uri;
     }
 
     /**
-     * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
-     * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
-     * by default, can be overridden in child contracts.
+     * @dev Retrieves the base URI for token metadata.
+     * @return The base URI.
      */
     function _baseURI() internal view override returns (string memory) {
         return baseURI;
     }
 
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        onlyRole(DEFAULT_ADMIN_ROLE)
-        override
-    {}
+    /**
+     * @dev Called by the upgrade mechanism to check if the new implementation should be allowed.
+     * @param newImplementation The address of the new implementation contract.
+     */
+    function _authorizeUpgrade(address newImplementation) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}
 
-    function addType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    /**
+     * @dev Adds a new supported token type.
+     * @param tokenType The token type to add.
+     */
+    function addType(string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         types[tokenType] = true;
     }
 
-    function removeType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    /**
+     * @dev Removes a supported token type.
+     * @param tokenType The token type to remove.
+     */
+    function removeType(string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
         delete types[tokenType];
     }
 
+    /**
+     * @dev Sets the contributor hash.
+     * @param hash The contributor hash to set.
+     */
     function setContributorHash(bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE) {
         contributorHash = hash;
     }
 
+    /**
+     * @dev Mints a new token.
+     * @param to The address to mint the token to.
+     * @param tokenType The token type.
+     * @param payload The token payload.
+     * @param hash The token hash.
+     * @param mintGrant The minting permission granted to the recipient.
+     */
     function safeMint(address to, string memory tokenType, string memory payload, bytes memory hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
         mintBadge(to, tokenType, payload, hash, mintGrant);
     }
 
+    /**
+     * @dev Internal function to mint a badge token.
+     * @param to The address to mint the token to.
+     * @param tokenType The token type.
+     * @param payload The token payload.
+     * @param hash The token hash.
+     * @param mintGrant The minting permission granted to the recipient.
+     */
     function mintBadge(address to, string memory tokenType, string memory payload, bytes memory hash, uint mintGrant) private {
         require(types[tokenType], "type should be declared");
-        // require(bytes(payload).length != 0, "payload can't be empty");
         
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
@@ -107,93 +154,108 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         }
     }
 
+    /**
+     * @dev Assigns a hash to a token.
+     * @param tokenId The ID of the token.
+     * @param hash The hash to assign.
+     */
     function assignHash(uint tokenId, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE) {
         _requireMinted(tokenId);
         require(tokensData[tokenId].hash.length == 0, "hash already set");
         tokensData[tokenId].hash = hash;
     }
 
-    function publicMint (address to) public {
+    /**
+     * @dev Mints a token for the caller.
+     */
+    function publicMint() public {
         require(allowedMinting[msg.sender] > 0, "no minting allowed");
         allowedMinting[msg.sender]--;
-        mintRemixer(to);
+        mintRemixer(msg.sender);
     }
 
+    /**
+     * @dev Internal function to mint a remixer token.
+     * @param to The address to mint the token to.
+     */
     function mintRemixer(address to) private {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
 
-        // tokensData[tokenId].payload = "";
         tokensData[tokenId].tokenType = "Remixer";
         tokensData[tokenId].hash = contributorHash;
     }
 
-    function grantRemixersMinting (address[] calldata remixers, uint amount) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+    /**
+     * @dev Grants minting permissions to a list of remixers.
+     * @param remixers The addresses to grant minting permissions to.
+     * @param amount The amount of minting permissions to grant.
+     */
+    function grantRemixersMinting(address[] calldata remixers, uint amount) public onlyRole(DEFAULT_ADMIN_ROLE) {
         for (uint k = 0; k < remixers.length; k++) {
             allowedMinting[remixers[k]] += amount;
         }
     }
 
-    function setChallenge(address verifier, uint[2] calldata challenge, uint max, string calldata tokenType, string calldata payload, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE)  {
-        addType(tokenType);
-        zkVerifier = verifier;
-        zkChallenge = challenge;
-        zkChallengeTokenType = tokenType;
-        zkChallengePayload = payload;
-        zkChallengeHash = hash;
-        zkMax = max;
-        publishersAmount = 0;
+    /**
+     * @dev Revokes minting permissions from a list of remixers.
+     * @param remixers The addresses to revoke minting permissions from.
+     * @param amount The amount of minting permissions to revoke.
+     */
+    function revokeRemixersMinting(address[] calldata remixers, uint amount) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        for (uint k = 0; k < remixers.length; k++) {
+            require(allowedMinting[remixers[k]] >= amount, "not enough minting permissions");
+            allowedMinting[remixers[k]] -= amount;
+        }
+    }
+
+    /**
+     * @dev Creates a new challenge by setting the ZKChallenge data.
+     * @param challengeTokenType The token type of the challenge.
+     * @param challengePayload The payload of the challenge.
+     * @param challengeHash The hash of the challenge.
+     * @param max The maximum number of tokens to be published as a solution.
+     * @param publishersList The addresses of the publishers allowed to publish solutions.
+     */
+    function createChallenge(string calldata challengeTokenType, string calldata challengePayload, bytes calldata challengeHash, uint max, address[] calldata publishersList) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(types[challengeTokenType], "challenge type should be declared");
+        require(publishersList.length > 0, "publishers list should not be empty");
+
+        zkChallengeTokenType = challengeTokenType;
+        zkChallengePayload = challengePayload;
+        zkChallengeHash = challengeHash;
         zkChallengeNonce++;
+        zkMax = max;
+        publishersAmount = publishersList.length;
+
+        for (uint k = 0; k < publishersList.length; k++) {
+            publishers[abi.encodePacked(challengeTokenType, challengePayload, challengeHash, k)] = k;
+        }
     }
 
-    function publishChallenge (ZKVerifier.Proof memory proof, uint[3] memory input) public {
-        require(zkVerifier != address(0), "no challenge started");
-        require(publishersAmount < zkMax, "publishers reached maximum amount");
-        bytes memory nullifier = abi.encodePacked(zkChallengeNonce, input[2]);
-        bytes memory publisher = abi.encodePacked(zkChallengeNonce, msg.sender);
-        require(nullifiers[nullifier] == 0, "proof already published");
-        require(publishers[publisher] == 0, "current published has already submitted");
-        require(zkChallenge[0] == input[0], "provided challenge is not valid");
-        require(zkChallenge[1] == input[1], "provided challenge is not valid");
+    /**
+     * @dev Publishes a solution to a challenge.
+     * @param solutionType The token type of the solution.
+     * @param solutionPayload The payload of the solution.
+     * @param proof The proof data of the solution.
+     */
+    function publishChallenge(string calldata solutionType, string calldata solutionPayload, uint[2] calldata proof) public {
+        require(types[solutionType], "solution type should be declared");
+        require(publishers[abi.encodePacked(zkChallengeTokenType, zkChallengePayload, zkChallengeHash, proof[0])] > 0, "not a valid publisher");
+        require(proof[1] < zkMax, "exceeded maximum solutions");
 
-        // function verifyTx(Proof memory proof, uint[3] memory input) public view returns (bool r)
-        (bool success, bytes memory data) = zkVerifier.call{ value: 0 }(
-            abi.encodeWithSignature("verifyTx(((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256)),uint256[3])", proof, input)
-        );
-        
-        require(success, "the call to the verifier failed");
+        bytes memory solutionHash = Proof.hash(solutionType, solutionPayload, proof);
+        require(solutionHash.length > 0, "invalid solution hash");
+        require(nullifiers[solutionHash] == 0, "solution already published");
 
-        (bool verified) = abi.decode(data, (bool));        
-        require(verified, "the provided proof isn't valid");        
-        
-        mintBadge(msg.sender, zkChallengeTokenType, zkChallengePayload, zkChallengeHash, 1);
-        publishersAmount++;
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(msg.sender, tokenId);
 
-        nullifiers[nullifier] = 1;
-        publishers[publisher] = 1;        
+        tokensData[tokenId].tokenType = solutionType;
+        tokensData[tokenId].payload = solutionPayload;
+        tokensData[tokenId].hash = solutionHash;
+        nullifiers[solutionHash] = tokenId;
     }
-
-    function version () public pure returns (string memory) {
-        return "2.4.0";
-    }
-
-    // The following functions are overrides required by Solidity.
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
-    {
-        require(from == address(0), "token not transferable");
-        super._beforeTokenTransfer(from, to, tokenId);
-    }
-
-    // The following functions are overrides required by Solidity.
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable, AccessControlUpgradeable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }    
 }
