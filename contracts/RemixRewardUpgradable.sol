@@ -147,7 +147,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         zkChallengeNonce++;
     }
 
-    function publishChallenge (ZKVerifier.Proof memory proof, uint[3] memory input) public {
+    function publishChallenge (ZKVerifier.Proof memory proof, uint[1] memory input) public {
         require(zkVerifier != address(0), "no challenge started");
         require(publishersAmount < zkMax, "publishers reached maximum amount");
         bytes memory nullifier = abi.encodePacked(zkChallengeNonce, input[2]);
@@ -159,7 +159,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
         // function verifyTx(Proof memory proof, uint[3] memory input) public view returns (bool r)
         (bool success, bytes memory data) = zkVerifier.call{ value: 0 }(
-            abi.encodeWithSignature("verifyTx(((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256)),uint256[3])", proof, input)
+            abi.encodeWithSignature("verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[1])", proof.a, proof.b, proof.c, input)
         );
         
         require(success, "the call to the verifier failed");
