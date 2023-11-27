@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.22+commit.4fc1097e"
+		"version": "0.8.21+commit.d9974bed"
 	},
 	"language": "Solidity",
 	"output": {
@@ -588,9 +588,9 @@
 						"type": "tuple"
 					},
 					{
-						"internalType": "uint256[3]",
+						"internalType": "uint256[2]",
 						"name": "input",
-						"type": "uint256[3]"
+						"type": "uint256[2]"
 					}
 				],
 				"name": "publishChallenge",
@@ -802,9 +802,9 @@
 						"type": "address"
 					},
 					{
-						"internalType": "uint256[2]",
+						"internalType": "uint256[1]",
 						"name": "challenge",
-						"type": "uint256[2]"
+						"type": "uint256[1]"
 					},
 					{
 						"internalType": "uint256",
@@ -1467,11 +1467,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x622353b702ae5e613740eb1002050517703983c4a0cd5bb111078c1ee4399f54",
+			"keccak256": "0xea764955d046b241c5d006a6b03ec58f95ae2d70431c520acf797b866e768bac",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://de716ffbff85ee84c001c161cc495bace040e4f501787d0e748247805f17668d",
-				"dweb:/ipfs/QmVM63K1zV3CJkdTZ77sQa1sgYUaTwCPQkGhKu2PpZCauK"
+				"bzz-raw://08e4a116fc2dcab76d6c8723c77854b67d9953b5233d7323f2bda0b6b2dcc21f",
+				"dweb:/ipfs/QmSpgaPTKTppkn37B8a936D26F6x3dhuLeHPH9KNYcEKPs"
 			]
 		}
 	},
