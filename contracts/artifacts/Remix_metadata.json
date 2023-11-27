@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.21+commit.d9974bed"
+		"version": "0.8.22+commit.4fc1097e"
 	},
 	"language": "Solidity",
 	"output": {
@@ -588,9 +588,9 @@
 						"type": "tuple"
 					},
 					{
-						"internalType": "uint256[2]",
+						"internalType": "uint256[3]",
 						"name": "input",
-						"type": "uint256[2]"
+						"type": "uint256[3]"
 					}
 				],
 				"name": "publishChallenge",
@@ -1467,11 +1467,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0xea764955d046b241c5d006a6b03ec58f95ae2d70431c520acf797b866e768bac",
+			"keccak256": "0x9cdca9192381b4fed1b45dfac3214b03e4c712935f52a16d2d29738c3f1103f7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://08e4a116fc2dcab76d6c8723c77854b67d9953b5233d7323f2bda0b6b2dcc21f",
-				"dweb:/ipfs/QmSpgaPTKTppkn37B8a936D26F6x3dhuLeHPH9KNYcEKPs"
+				"bzz-raw://ea610f0ec64a43b3a7c0a18fc3bc03dfffd0c8d136c786de6a290d1ae336da45",
+				"dweb:/ipfs/QmTaA1zT1Bx8cJNtgnEyLigDvFjKexbxAanrRZZposgkCm"
 			]
 		}
 	},

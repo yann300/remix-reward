@@ -7,6 +7,7 @@
 import { ethers } from "ethers";
 import { expect } from "chai";
 import { proofs } from "./data"
+import { toHex } from 'web3-utils'
 
 let remix: ethers.Contract
 let proxy: ethers.Contract
@@ -89,7 +90,7 @@ describe("Basic remix reward deploy", function () {
   it("Should publish verifier", async function () {
     const [owner, betatester, user, betatester2] = await ethers.getSigners();
     // deploy verifier
-    const Verifier = await ethers.getContractFactory("Verifier");      
+    const Verifier = await ethers.getContractFactory("Groth16Verifier");      
     verifier = await Verifier.connect(owner).deploy();
     await verifier.deployed();    
   });
@@ -97,7 +98,7 @@ describe("Basic remix reward deploy", function () {
   const challengeHashes = ['10805175833937845557201839769804057382368594205392463841800803916892395711484']
   const tokenType = 'remix challenge'
   const payload = 'no payload'
-  const hash = '0xabababcdef12'
+  const hash =  '0xabababcdef12'
 
   it("Should set a new challenge", async function () {
     const [owner, betatester, user, betatester2] = await ethers.getSigners();
@@ -110,13 +111,16 @@ describe("Basic remix reward deploy", function () {
   it("Should refuse an invalid challenge", async function () {   
     const [owner, betatester, user, betatester2] = await ethers.getSigners();
 
-    const invalidInput = ["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc"]
     let proofStruct = {
             a: proofs.proof1[0],
             b: proofs.proof1[1],
             c: proofs.proof1[2],
         }
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, invalidInput)).to.be.revertedWith("the provided proof isn't valid")
+    proofStruct.a = [
+            "0x11b3ef927dfb8c935901ccbcc2b8e7c57049e1bb3eafff67cd4dd44950759f17",
+            "0x1c79b1dd1e858f524854357a191cdf40716297fffb8c5503edd0d5801ab86e9d"
+        ]
+    await expect(remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof1[3])).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept a challenge", async function () {   
@@ -155,7 +159,7 @@ describe("Basic remix reward deploy", function () {
             b: proofs.proof2[1],
             c: proofs.proof2[2],
         }
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof2[3])).to.be.revertedWith('current published has already submitted')
+    await expect(remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof2[3])).to.be.revertedWith('current publisher has already submitted')
   });
 
   it("Published should reach maximum count", async function () {    
@@ -203,8 +207,13 @@ describe("Basic remix reward deploy", function () {
             b: proofs.proof1[1],
             c: proofs.proof1[2],
         }
-    const invalidInput = ["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc"]
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, invalidInput)).to.be.revertedWith("the provided proof isn't valid")
+  
+    const invalidSignals = [
+      proofs.proof1[3][0],
+      proofs.proof1[3][1],
+      "0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6fa", // invalid
+    ]
+    await expect(remix.connect(betatester2).publishChallenge(proofStruct, invalidSignals)).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept again a challenge", async function () {   

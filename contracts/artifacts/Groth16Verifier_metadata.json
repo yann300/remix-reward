@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.21+commit.d9974bed"
+		"version": "0.8.22+commit.4fc1097e"
 	},
 	"language": "Solidity",
 	"output": {
@@ -23,9 +23,9 @@
 						"type": "uint256[2]"
 					},
 					{
-						"internalType": "uint256[1]",
+						"internalType": "uint256[3]",
 						"name": "_pubSignals",
-						"type": "uint256[1]"
+						"type": "uint256[3]"
 					}
 				],
 				"name": "verifyProof",
@@ -68,11 +68,11 @@
 	},
 	"sources": {
 		"contracts/Verifier.sol": {
-			"keccak256": "0x2de52349e954746dd23d0e85448c7e4ee88fd516f7a3d62ceb9b7e8f1fc45af2",
+			"keccak256": "0x0a4dc76e1d9cdcad071afc68d526ca35939f3a224831b558de5bb4964a3ab322",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://d3811bcd0c06ef5b1dd2b014545fe22b1734e78765916fc785db84980a3a7fb6",
-				"dweb:/ipfs/QmdcY77cBhFw1YicUkwN42qxH15KDh9orZwwswAj4HaaBG"
+				"bzz-raw://abf68ab38a149b22b4726b1c545d7ae511271ebc20ae53e7e44ed6104868d767",
+				"dweb:/ipfs/QmUPcUQvLxYGZQBdJpGFVjv2f5JJNEkxPyA3csQ28SmFZb"
 			]
 		}
 	},
