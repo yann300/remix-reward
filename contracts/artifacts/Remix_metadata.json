@@ -1270,7 +1270,7 @@
 		"compilationTarget": {
 			"contracts/RemixRewardUpgradable.sol": "Remix"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
