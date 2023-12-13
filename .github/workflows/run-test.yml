@@ -12,9 +12,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.0.0
-      - name: Run SUT Action
+      - name: Run Mocha Chai Unit Test Action
         uses: EthereumRemix/ts-sol-test@main
         with:
           test-path: 'tests/test.ts'
           contract-path: 'contracts'
           compiler-version: '0.8.7'
+          block-number: 0

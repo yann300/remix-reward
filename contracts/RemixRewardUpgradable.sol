@@ -26,7 +26,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     string public baseURI;
     
     address public zkVerifier;
-    uint[2] public zkChallenge;    
+    uint[2] public zkChallenge; // only the first item is used.
     uint public zkChallengeNonce;
     uint public zkMax;
     uint public publishersAmount;
@@ -135,7 +135,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         }
     }
 
-    function setChallenge(address verifier, uint[2] calldata challenge, uint max, string calldata tokenType, string calldata payload, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+    function setChallenge(address verifier, uint[1] calldata challenge, uint max, string calldata tokenType, string calldata payload, bytes calldata hash) public onlyRole(DEFAULT_ADMIN_ROLE)  {
         addType(tokenType);
         zkVerifier = verifier;
         zkChallenge = challenge;
@@ -153,13 +153,12 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         bytes memory nullifier = abi.encodePacked(zkChallengeNonce, input[2]);
         bytes memory publisher = abi.encodePacked(zkChallengeNonce, msg.sender);
         require(nullifiers[nullifier] == 0, "proof already published");
-        require(publishers[publisher] == 0, "current published has already submitted");
-        require(zkChallenge[0] == input[0], "provided challenge is not valid");
-        require(zkChallenge[1] == input[1], "provided challenge is not valid");
-
+        require(publishers[publisher] == 0, "current publisher has already submitted");
+        require(zkChallenge[0] == input[1], "provided challenge is not valid");
+        
         // function verifyTx(Proof memory proof, uint[3] memory input) public view returns (bool r)
         (bool success, bytes memory data) = zkVerifier.call{ value: 0 }(
-            abi.encodeWithSignature("verifyTx(((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256)),uint256[3])", proof, input)
+            abi.encodeWithSignature("verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[3])", proof.a, proof.b, proof.c, input)
         );
         
         require(success, "the call to the verifier failed");
@@ -175,7 +174,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     }
 
     function version () public pure returns (string memory) {
-        return "2.4.0";
+        return "2.5.0";
     }
 
     // The following functions are overrides required by Solidity.
