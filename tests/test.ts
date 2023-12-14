@@ -10,9 +10,17 @@ import { expect } from "chai";
 let remix: ethers.Contract
 let proxy: ethers.Contract
 let verifier: ethers.Contract
+
+let owner, betatester, user, betatester2, user2, user3, trainer1, student1
+
+describe("Basic remix reward deploy", function () {
+  it("Retrieve accounts", async function () {
+    [owner, betatester, user, betatester2, user2, user3, trainer1, student1] = await ethers.getSigners();
+  })
+})
+
 describe("Basic remix reward deploy", function () {
   it("Deploy with proxy", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
 
     const Remix = await ethers.getContractFactory("Remix");    
     remix = await Remix.connect(owner).deploy();
@@ -31,9 +39,10 @@ describe("Basic remix reward deploy", function () {
 
     expect(await remix.name()).to.equal('Remix');
   });
+})
 
+describe("Basic minting", function () {
   it("Should mint a badge", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
     const ipfsHash = '0xabcd1234'
     const txAddType = await remix.addType('Beta Tester')
     await txAddType.wait()
@@ -43,9 +52,7 @@ describe("Basic remix reward deploy", function () {
     expect((await remix.allowedMinting(user.address))).to.equal(0);
   });
 
-  it("Should re-mint a badge", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
-    
+  it("Should re-mint a badge", async function () {   
     const mint = await remix.connect(betatester).publicMint(user.address)
     await mint.wait()
     expect((await remix.allowedMinting(betatester.address))).to.equal(1);
@@ -56,8 +63,6 @@ describe("Basic remix reward deploy", function () {
   });
 
   it("Should assign an empty hash", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
-
     // check if hash is empty
     let data = await remix.tokensData(1)
     expect(data[2]).to.equal('0x');
@@ -72,7 +77,6 @@ describe("Basic remix reward deploy", function () {
   });
 
   it("Set a contributor badge hash", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
     await expect(remix.connect(betatester).setContributorHash('0x000000000000000000000000000000000000000000000000000000000000000a'))
       .to.be.revertedWith('is missing role 0x0000000000000000000000000000000000000000000000000000000000000000') // remixer badge hash
     const contributor = await remix.connect(owner).setContributorHash('0x000000000000000000000000000000000000000000000000000000000000000a')
@@ -80,13 +84,14 @@ describe("Basic remix reward deploy", function () {
   });
 
   it("Should not be allowed minting", async function () {
-    const [owner, betatester, user] = await ethers.getSigners();
     const ipfsHash = '0xabcd1234'
     await expect(remix.connect(betatester).safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)).to.be.revertedWith('is missing role 0x0000000000000000000000000000000000000000000000000000000000000000')
   });
+});
 
+
+describe("Challenge", function () {
   it("Should publish verifier", async function () {
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
     // deploy verifier
     const Verifier = await ethers.getContractFactory("Verifier");      
     verifier = await Verifier.connect(owner).deploy();
@@ -103,7 +108,6 @@ describe("Basic remix reward deploy", function () {
   const hash = '0xabababcdef12'
 
   it("Should set a new challenge", async function () {
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
     
     console.log("verifier address", verifier.address)
     const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
@@ -111,14 +115,12 @@ describe("Basic remix reward deploy", function () {
   })
 
   it("Should refuse an invalid challenge", async function () {   
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
 
     const invalidInput = ["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc","0x000000000000000000000000000000000000000000000000000000000000002b"]
     await expect(remix.connect(betatester2).publishChallenge(proof1[0], invalidInput)).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept a challenge", async function () {   
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
 
     const publishChallengeTx = await remix.connect(betatester2).publishChallenge(proof1[0], proof1[1])
     await publishChallengeTx.wait()
@@ -131,20 +133,14 @@ describe("Basic remix reward deploy", function () {
   });
 
   it("Should refuse a challenge if proof has already been published", async function () {    
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
-    
     await expect(remix.connect(owner).publishChallenge(proof1[0], proof1[1])).to.be.revertedWith('proof already published')
   });
 
   it("Should refuse a challenge if sender already published a valid solution", async function () {    
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
-    
     await expect(remix.connect(betatester2).publishChallenge(proof2[0], proof2[1])).to.be.revertedWith('current published has already submitted')
   });
 
   it("Published should reach maximum count", async function () {    
-    const [owner, betatester, user, betatester2, user2, user3] = await ethers.getSigners();
-    
     const pub2 = await remix.connect(owner).publishChallenge(proof2[0], proof2[1])
     await pub2.wait()
 
@@ -156,25 +152,68 @@ describe("Basic remix reward deploy", function () {
   });
 
   it("Should re-set a new challenge", async function () {
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
-    
     console.log("verifier address", verifier.address)
     const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
     await setChallengeTx.wait()
   })
 
   it("Should refuse again an invalid challenge", async function () {   
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
-
     const invalidInput = ["0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6f6","0x0000000000000000000000000000000042858891fcb526e577de0810598b50bc","0x000000000000000000000000000000000000000000000000000000000000002b"]
     await expect(remix.connect(betatester2).publishChallenge(proof1[0], invalidInput)).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept again a challenge", async function () {   
-    const [owner, betatester, user, betatester2] = await ethers.getSigners();
-
     const publishChallengeTx = await remix.connect(betatester2).publishChallenge(proof1[0], proof1[1])
     await publishChallengeTx.wait()
   });
-});
+})
+
+describe("Add / remove trainer", function () {
+  it("Add a trainer should fail", async function () {
+    await expect(remix.connect(trainer1).addTrainer(trainer1.address)).to.be.revertedWith('account 0x5c6b0f7bf3e7ce046039bd8fabdfd3f9f5021678 is missing role 0x0000000000000000000000000000000000000000000000000000000000000000')        
+  })
+
+  it("Add a trainer should success", async function () {
+    expect(await remix.trainers(user.address)).to.be.equal(0)
+    expect(await remix.trainers(trainer1.address)).to.be.equal(0)
+
+    const addT = await remix.connect(owner).addTrainer(trainer1.address)
+    await addT.wait()
+    expect(await remix.trainers(trainer1.address)).to.be.equal(1)
+    
+  })
+
+  it("Trainer should grant minting a remixer badge", async function () {
+    await expect(await remix.allowedMinting(student1.address)).to.be.equal(0)  
+    const grantRemixersMintingTx = await remix.connect(trainer1).grantRemixersMinting([student1.address], 1)
+    await grantRemixersMintingTx.wait()
+    await expect(await remix.allowedMinting(student1.address)).to.be.equal(1)  
+  })
+
+  it("Student should mint a remixer", async function () {
+    const txPublicMint = await remix.connect(student1).publicMint(student1.address)
+    await txPublicMint.wait()
+
+    await expect(await remix.allowedMinting(student1.address)).to.be.equal(0)
+
+  })
+
+  it("Student not allowed minting a remixer", async function () {
+    await expect(remix.connect(student1).publicMint(student1.address)).to.be.revertedWith("no minting allowed")
+  })
+
+  it("Remove a trainer should success", async function () {
+    await expect(await remix.trainers(user.address)).to.be.equal(0)
+    await expect(await remix.trainers(trainer1.address)).to.be.equal(1)
+
+    const addT = await remix.connect(owner).removeTrainer(trainer1.address)
+    await addT.wait()
+    await expect(await remix.trainers(trainer1.address)).to.be.equal(0)
+    
+  })
+
+  it("Trainer shouldn't grant minting a remixer badge", async function () {
+    await expect(remix.connect(trainer1).grantRemixersMinting([student1.address], 1)).to.be.revertedWith("Caller is not a trainer")
+  })
+})
 
