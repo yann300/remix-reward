@@ -18,3 +18,4 @@ jobs:
           test-path: 'tests/test.ts'
           contract-path: 'contracts'
           compiler-version: '0.8.7'
+          block-number: 0
