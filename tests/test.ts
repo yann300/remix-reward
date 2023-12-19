@@ -13,7 +13,7 @@ let verifier: ethers.Contract
 
 let owner, betatester, user, betatester2, user2, user3, trainer1, student1
 
-describe("Basic remix reward deploy", function () {
+describe("Initialize accounts", function () {
   it("Retrieve accounts", async function () {
     [owner, betatester, user, betatester2, user2, user3, trainer1, student1] = await ethers.getSigners();
   })
