@@ -13,7 +13,7 @@ This feature is a way to reward Remix contributors to help grow our user base in
 
 Remix Rewards are currently not transferable. This feature leaves open the future possibility of granting holders proportional voting power to help the community decide on new features for the IDE and/or other issues governing the development of the Remix toolset.
 
-See the [remiw reward website](https://rewards.remix.ethereum.eth.limo) for a list of already minted badges.
+See the [remix reward website](https://rewards.remix.ethereum.eth.limo) for a list of already minted badges.
 
 ## For Challengers
 
@@ -31,5 +31,5 @@ he/she has the ability to allow student addresses to mint a soulbound nft, withi
 The easiest way for a trainer to allow their students to mint a badge is to run the `grantRemixerMinting.ts` from the `scripts` folder.
 Then the student can either: 
     - run the `remixerMint.ts` script.
-    - or browse the [remiw reward website](https://rewards.remix.ethereum.eth.limo) and go to the section `Mint a badge`
+    - or browse the [remix reward website](https://rewards.remix.ethereum.eth.limo) and go to the section `Mint a badge`
 
