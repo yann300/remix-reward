@@ -37,10 +37,17 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     string public zkChallengePayload;
     bytes public zkChallengeHash;
 
+    mapping(address => uint) public trainers;
+
     struct TokenData {
         string payload;
         string tokenType;
         bytes hash;
+    }
+
+    modifier isTrainer() {
+        require(trainers[msg.sender] == 1, "Caller is not a trainer");
+        _;
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -129,7 +136,15 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         tokensData[tokenId].hash = contributorHash;
     }
 
-    function grantRemixersMinting (address[] calldata remixers, uint amount) public onlyRole(DEFAULT_ADMIN_ROLE)  {
+    function addTrainer (address trainer) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        trainers[trainer] = 1;
+    }
+
+    function removeTrainer (address trainer) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        delete trainers[trainer];
+    }
+
+    function grantRemixersMinting (address[] calldata remixers, uint amount) public isTrainer()  {
         for (uint k = 0; k < remixers.length; k++) {
             allowedMinting[remixers[k]] += amount;
         }

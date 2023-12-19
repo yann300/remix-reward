@@ -234,6 +234,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "trainer",
+						"type": "address"
+					}
+				],
+				"name": "addTrainer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "string",
 						"name": "tokenType",
 						"type": "string"
@@ -633,6 +646,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "trainer",
+						"type": "address"
+					}
+				],
+				"name": "removeTrainer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "string",
 						"name": "tokenType",
 						"type": "string"
@@ -985,6 +1011,25 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "trainers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "from",
 						"type": "address"
 					},
@@ -1270,7 +1315,7 @@
 		"compilationTarget": {
 			"contracts/RemixRewardUpgradable.sol": "Remix"
 		},
-		"evmVersion": "paris",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -1467,11 +1512,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x1077d41361d10c6515b225d80dd63574d80978672e8a239f8a15d5f3ed782f02",
+			"keccak256": "0xaa00517b578f6d22a6fa1b24e9a96f80d714d6a8f813502e516a13492a5dc499",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://23e852e3f96949c1d874577321ad6a92524bb3ff46f4b154ae7be348324d41ee",
-				"dweb:/ipfs/QmQpBbGn11mM7JbTnLDi92WaU3sQ2nqEbbPXQwN4kQRXbB"
+				"bzz-raw://280e95fd8055fdb78275905e6de730e4c507911eaf94bc4c00defaa741dd79ec",
+				"dweb:/ipfs/QmNPXJff9Jz4rUrjWcxmvmoTMuoHDGvgmYhYAsCu4Sv5N3"
 			]
 		}
 	},
