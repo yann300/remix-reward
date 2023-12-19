@@ -8,11 +8,11 @@ async function main() {
         // "signer" represents the current selected account and provider.
         const signer = (new ethers.providers.Web3Provider(web3Provider)).getSigner()
 
-        // getContractFactory retruns the compilation result.
+        // getContractFactory returns the compilation result.
         // This will be used in the next line to instantiate an "ethers.Contract" object ot interact with the contract.
         const remixV1 = await ethers.getContractFactory("Remix")
         
-        // we finally use the address, the contract interfact and the current context (provider and account)
+        // we finally use the address, the contract artefact and the current context (provider and account)
         // to instantiate an ethers.Contract object.
         let contract = new ethers.Contract(address, remixV1.interface, signer);
 
