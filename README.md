@@ -1,46 +1,35 @@
-# Advanced Sample Hardhat Project
+# Remix Reward
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+deployed at 0x5d470270e889b61c08C51784cDC73442c4554011 on Optimism
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+## Overview
 
-Try running some of the following tasks:
+Remix reward is a program run by the Remix project. 
+It consists of a soulbound nft and is at the moment deployed in the Optimism chain.
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
-```
+Remix Project rewards contributors, beta testers, and UX research participants with NFTs deployed on Optimism.
+Remix Reward holders are able to mint a second “Remixer” user NFT badge to any wallet address of their choice.
+This feature is a way to reward Remix contributors to help grow our user base into a larger and more genuine open source community of practice.
 
-# Etherscan verification
+Remix Rewards are currently not transferable. This feature leaves open the future possibility of granting holders proportional voting power to help the community decide on new features for the IDE and/or other issues governing the development of the Remix toolset.
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+See the [remiw reward website](https://rewards.remix.ethereum.eth.limo) for a list of already minted badges.
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+## For Challengers
 
-```shell
-hardhat run --network ropsten scripts/sample-script.ts
-```
+This contract allows users to publish zero knowledge proofs generated using the Remix Challenges program.
+The Remix challenges program is run regularly by the Remix project. 
+It consists of a list of four questions.
+Participants can generate a proof that they found the answer to the four questions without publicly revealing the answers. 
+Publishing such a proof to the contract will mint a badge to the participant.
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+## For Trainers
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
+When a trainer has been whitelisted in the contract (Please join our discord server and the community if you wish to be whitelisted as a trainer),
+he/she has the ability to allow student addresses to mint a soulbound nft, within the context of a workshop, classes, etc...
 
-# Performance optimizations
+The easiest way for a trainer to allow their students to mint a badge is to run the `grantRemixerMinting.ts` from the `scripts` folder.
+Then the student can either: 
+    - run the `remixerMint.ts` script.
+    - or browse the [remiw reward website](https://rewards.remix.ethereum.eth.limo) and go to the section `Mint a badge`
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
