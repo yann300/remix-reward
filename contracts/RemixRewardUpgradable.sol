@@ -189,7 +189,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
     }
 
     function version () public pure returns (string memory) {
-        return "2.5.0";
+        return "2.6.0";
     }
 
     // The following functions are overrides required by Solidity.

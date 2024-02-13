@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.22+commit.4fc1097e"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -1321,7 +1321,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": true,
+			"enabled": false,
 			"runs": 200
 		},
 		"remappings": []
@@ -1512,11 +1512,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0xaa00517b578f6d22a6fa1b24e9a96f80d714d6a8f813502e516a13492a5dc499",
+			"keccak256": "0xe6b37476fccc1f3bcfe0aecbfe416273dee5442725e4f71e72b413dbceef87b7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://280e95fd8055fdb78275905e6de730e4c507911eaf94bc4c00defaa741dd79ec",
-				"dweb:/ipfs/QmNPXJff9Jz4rUrjWcxmvmoTMuoHDGvgmYhYAsCu4Sv5N3"
+				"bzz-raw://4a97a6046835b0a18a757af63aabde89bcb0fd04938b9079d42850170dce8990",
+				"dweb:/ipfs/QmNVxBJSgGobQM72PMw1PN1iXvosaUcNg3UvvYtRMAspsP"
 			]
 		}
 	},
