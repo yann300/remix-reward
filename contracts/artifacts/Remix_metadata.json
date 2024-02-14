@@ -579,41 +579,6 @@
 			{
 				"inputs": [
 					{
-						"components": [
-							{
-								"internalType": "uint256[2]",
-								"name": "a",
-								"type": "uint256[2]"
-							},
-							{
-								"internalType": "uint256[2][2]",
-								"name": "b",
-								"type": "uint256[2][2]"
-							},
-							{
-								"internalType": "uint256[2]",
-								"name": "c",
-								"type": "uint256[2]"
-							}
-						],
-						"internalType": "struct ZKVerifier.Proof",
-						"name": "proof",
-						"type": "tuple"
-					},
-					{
-						"internalType": "uint256[3]",
-						"name": "input",
-						"type": "uint256[3]"
-					}
-				],
-				"name": "publishChallenge",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "bytes",
 						"name": "",
 						"type": "bytes"
@@ -816,44 +781,6 @@
 					}
 				],
 				"name": "setBaseURI",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "verifier",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256[1]",
-						"name": "challenge",
-						"type": "uint256[1]"
-					},
-					{
-						"internalType": "uint256",
-						"name": "max",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "tokenType",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "payload",
-						"type": "string"
-					},
-					{
-						"internalType": "bytes",
-						"name": "hash",
-						"type": "bytes"
-					}
-				],
-				"name": "setChallenge",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1321,7 +1248,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -1503,20 +1430,12 @@
 				"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy"
 			]
 		},
-		"contracts/Proof.sol": {
-			"keccak256": "0x1a0c3dc96ef35400af8997f5962a86d9a521f66d1eea044aabbb7e656f7eff7e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://cb4c5696eedf87bb9e420aca2622a4bd2e6a291c9e2aafa61829feba874ad9c9",
-				"dweb:/ipfs/QmaLFEfzPC4SmtgcY2EVdk1NyjdhbPuWVSRevst7JForuN"
-			]
-		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0xe6b37476fccc1f3bcfe0aecbfe416273dee5442725e4f71e72b413dbceef87b7",
+			"keccak256": "0x88363e198a7375571dc5d171375f934e6ba7eef98b10f0aa4227ad3c17398d5f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4a97a6046835b0a18a757af63aabde89bcb0fd04938b9079d42850170dce8990",
-				"dweb:/ipfs/QmNVxBJSgGobQM72PMw1PN1iXvosaUcNg3UvvYtRMAspsP"
+				"bzz-raw://4fe2a70061b357b740127ebe43391bfcd30486342806f2d5fd3da998052c7ada",
+				"dweb:/ipfs/QmfBMQE2jGk2XhJ6QujK8BHGCnhQC1GqxGyyoqt3b5TKQc"
 			]
 		}
 	},

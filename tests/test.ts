@@ -93,6 +93,27 @@ describe("Basic minting", function () {
 
 
 describe("Challenge", function () {
+  let remixChallenges
+
+  it("Deploy Challenge with proxy", async function () {
+
+    const Remix = await ethers.getContractFactory("RemixChallenges");    
+    remixChallenges = await Remix.connect(owner).deploy();
+    await remixChallenges.deployed()
+
+    const implAddress = remixChallenges.address
+    console.log('implementation address', implAddress)
+
+    const Proxy = await ethers.getContractFactory('ERC1967Proxy')
+    const proxyChallenges = await Proxy.connect(owner).deploy(implAddress, '0x8129fc1c')
+    await proxyChallenges.deployed()
+    console.log("Remix reward deployed to:", proxyChallenges.address);
+
+    remixChallenges = await ethers.getContractAt("RemixChallenges", proxyChallenges.address)
+    remixChallenges = remixChallenges.connect(owner)
+
+  });
+
   it("Should publish verifier", async function () {
     // deploy verifier
     const Verifier = await ethers.getContractFactory("Groth16Verifier");      
@@ -100,7 +121,7 @@ describe("Challenge", function () {
     await verifier.deployed();    
   });
 
-  const challengeHashes = ['10805175833937845557201839769804057382368594205392463841800803916892395711484']
+  const challengeHash = '10805175833937845557201839769804057382368594205392463841800803916892395711484'
   const tokenType = 'remix challenge'
   const payload = 'no payload'
   const hash =  '0xabababcdef12'
@@ -108,8 +129,28 @@ describe("Challenge", function () {
   it("Should set a new challenge", async function () {
     
     console.log("verifier address", verifier.address)
-    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
+    const challenge = {
+      set: 1,
+      publishersCount: 0,
+      verifier: verifier.address,
+      challengeHash,
+      max: 3,
+      tokenType,
+      payload, 
+      hash
+    }
+    const setChallengeTx = await remixChallenges.connect(owner).setChallenge(challenge);
     await setChallengeTx.wait()
+  })
+
+  it("Should set the remix reward contract", async function () {
+    const tx = await remixChallenges.connect(owner).setRewardContract(remix.address);
+    await tx.wait()
+  })
+
+  it("Should call the remix reward contract to set the correct permission to the challenges contract", async function () {
+    const tx = await remix.connect(owner).grantRole('0x0000000000000000000000000000000000000000000000000000000000000000', remixChallenges.address);
+    await tx.wait()
   })
 
   it("Should refuse an invalid challenge", async function () {   
@@ -123,7 +164,7 @@ describe("Challenge", function () {
             "0x11b3ef927dfb8c935901ccbcc2b8e7c57049e1bb3eafff67cd4dd44950759f17",
             "0x1c79b1dd1e858f524854357a191cdf40716297fffb8c5503edd0d5801ab86e9d"
         ]
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof1[3])).to.be.revertedWith("the provided proof isn't valid")
+    await expect(remixChallenges.connect(betatester2).publishChallenge(0, proofStruct, proofs.proof1[3])).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept a challenge", async function () {   
@@ -133,7 +174,7 @@ describe("Challenge", function () {
             b: proofs.proof1[1],
             c: proofs.proof1[2],
         }
-    const publishChallengeTx = await remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof1[3])
+    const publishChallengeTx = await remixChallenges.connect(betatester2).publishChallenge(0, proofStruct, proofs.proof1[3])
     await publishChallengeTx.wait()
     const balance = await remix.connect(betatester2).balanceOf(betatester2.address)
     const tokenId = await remix.connect(betatester2).tokenOfOwnerByIndex(betatester2.address, balance - 1)
@@ -150,7 +191,7 @@ describe("Challenge", function () {
             b: proofs.proof1[1],
             c: proofs.proof1[2],
         }
-    await expect(remix.connect(owner).publishChallenge(proofStruct, proofs.proof1[3])).to.be.revertedWith('proof already published')
+    await expect(remixChallenges.connect(owner).publishChallenge(0, proofStruct, proofs.proof1[3])).to.be.revertedWith('proof already published')
   });
     
   it("Should refuse a challenge if sender already published a valid solution", async function () {    
@@ -161,7 +202,7 @@ describe("Challenge", function () {
             b: proofs.proof2[1],
             c: proofs.proof2[2],
         }
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof2[3])).to.be.revertedWith('current publisher has already submitted')
+    await expect(remixChallenges.connect(betatester2).publishChallenge(0, proofStruct, proofs.proof2[3])).to.be.revertedWith('current publisher has already submitted')
   });
 
   it("Published should reach maximum count", async function () {    
@@ -172,7 +213,7 @@ describe("Challenge", function () {
             b: proofs.proof2[1],
             c: proofs.proof2[2],
         }
-    const pub2 = await remix.connect(owner).publishChallenge(proofStruct, proofs.proof2[3])
+    const pub2 = await remixChallenges.connect(owner).publishChallenge(0, proofStruct, proofs.proof2[3])
     await pub2.wait()
 
     proofStruct = {
@@ -180,22 +221,32 @@ describe("Challenge", function () {
             b: proofs.proof3[1],
             c: proofs.proof3[2],
         }
-    const pub3 = await remix.connect(user2).publishChallenge(proofStruct, proofs.proof3[3])
+    const pub3 = await remixChallenges.connect(user2).publishChallenge(0, proofStruct, proofs.proof3[3])
     await pub3.wait()
 
-    expect(await remix.publishersAmount()).to.be.equal(3)
+    expect((await remixChallenges.challenges(0)).publishersCount).to.be.equal(3)
 
     proofStruct = {
             a: proofs.proof4[0],
             b: proofs.proof4[1],
             c: proofs.proof4[2],
         }
-    expect(remix.connect(user3).publishChallenge(proofStruct, proofs.proof4[3])).to.revertedWith('publishers reached maximum amount')
+    expect(remixChallenges.connect(user3).publishChallenge(0, proofStruct, proofs.proof4[3])).to.revertedWith('publishers reached maximum amount')
   });
 
   it("Should re-set a new challenge", async function () {
     console.log("verifier address", verifier.address)
-    const setChallengeTx = await remix.connect(owner).setChallenge(verifier.address, challengeHashes, 3, tokenType, payload, hash);
+    const challenge = {
+      set: 1,
+      publishersCount: 0,
+      verifier: verifier.address,
+      challengeHash,
+      max: 3,
+      tokenType,
+      payload, 
+      hash
+    }
+    const setChallengeTx = await remixChallenges.connect(owner).setChallenge(challenge);
     await setChallengeTx.wait()
   })
 
@@ -213,7 +264,7 @@ describe("Challenge", function () {
       proofs.proof1[3][1],
       "0x00000000000000000000000000000000d421714eddc84195ee8f80d5379cf6fa", // invalid
     ]
-    await expect(remix.connect(betatester2).publishChallenge(proofStruct, invalidSignals)).to.be.revertedWith("the provided proof isn't valid")
+    await expect(remixChallenges.connect(betatester2).publishChallenge(1, proofStruct, invalidSignals)).to.be.revertedWith("the provided proof isn't valid")
   });
 
   it("Should accept again a challenge", async function () {   
@@ -224,7 +275,7 @@ describe("Challenge", function () {
             b: proofs.proof1[1],
             c: proofs.proof1[2],
         }
-    const publishChallengeTx = await remix.connect(betatester2).publishChallenge(proofStruct, proofs.proof1[3])
+    const publishChallengeTx = await remixChallenges.connect(betatester2).publishChallenge(1, proofStruct, proofs.proof1[3])
     await publishChallengeTx.wait()
   })  
 })
