@@ -220,7 +220,33 @@
 			},
 			{
 				"inputs": [],
+				"name": "CHALLENGE_PROVIDER_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "DEFAULT_ADMIN_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "TRAINER_ROLE",
 				"outputs": [
 					{
 						"internalType": "bytes32",
@@ -1431,11 +1457,11 @@
 			]
 		},
 		"contracts/RemixRewardUpgradable.sol": {
-			"keccak256": "0x88363e198a7375571dc5d171375f934e6ba7eef98b10f0aa4227ad3c17398d5f",
+			"keccak256": "0x57e3ba5f94598c6c1bdbcf5516882917781d82cc3936147c46fcc9e2312f4588",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4fe2a70061b357b740127ebe43391bfcd30486342806f2d5fd3da998052c7ada",
-				"dweb:/ipfs/QmfBMQE2jGk2XhJ6QujK8BHGCnhQC1GqxGyyoqt3b5TKQc"
+				"bzz-raw://936abc2edcd9f19d681360c9e211d0c6c16048d0dfdca5d0aac596cc7f3a7edc",
+				"dweb:/ipfs/QmRVp6oaFZU2uDWSa7wqbdHyYoezRCJxYpsVYKMLLojeEk"
 			]
 		}
 	},

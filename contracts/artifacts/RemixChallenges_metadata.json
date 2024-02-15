@@ -757,11 +757,11 @@
 			]
 		},
 		"contracts/RemixChallenges.sol": {
-			"keccak256": "0xb8d24aa9f7c0e1a8b0eb8b16c833d972a7d8dfdc73bdfc633c83c42f463bdd5c",
+			"keccak256": "0xd336fecdb3fa8a4a05f2f49dea26cad35ccf132ae2a32ce3df7f17020050c213",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4d2792a977ea89b582206519f9541c443ae2c6dc7e8dd8c1614b6643cc78e319",
-				"dweb:/ipfs/QmZWx6vtQ3XksCwgS6CVtGKfoPhzzCWdttR8BwsXEmjLTA"
+				"bzz-raw://5c44dc95488a5e1e74dcfe13d99c46a958e7bd24016b20ddf14f1782e2c018c9",
+				"dweb:/ipfs/Qmeich2yFj3A9qVQAz1jJdb6CtrvJ4S957sGoWAYCqSr7G"
 			]
 		}
 	},

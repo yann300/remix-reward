@@ -47,8 +47,30 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     modifier isTrainer() {
         require(trainers[msg.sender] == 1, "Caller is not a trainer");
+        require(hasRole(TRAINER_ROLE, msg.sender), "Caller is not a trainer, no TRAINER_ROLE");
         _;
     }
+
+    modifier challengeProvider() {
+        require(hasRole(CHALLENGE_PROVIDER_ROLE, msg.sender), "Caller is not a trainer, no TRAINER_ROLE");
+        _;
+    }
+
+    modifier isAdmin() {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Caller is not a admin");
+        _;
+    }
+
+    modifier canSafeMint() {
+        require(
+            hasRole(CHALLENGE_PROVIDER_ROLE, msg.sender) || 
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender), 
+            "Caller is neither admin nor a challenge provider");
+        _;
+    }
+
+    bytes32 public constant TRAINER_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000001;
+    bytes32 public constant CHALLENGE_PROVIDER_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000002;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {}
@@ -82,7 +104,7 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         override
     {}
 
-    function addType (string calldata tokenType) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function addType (string calldata tokenType) public canSafeMint {
         types[tokenType] = true;
     }
 
@@ -94,7 +116,9 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
         contributorHash = hash;
     }
 
-    function safeMint(address to, string calldata tokenType, string memory payload, bytes memory hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function safeMint(address to, string calldata tokenType, string memory payload, bytes memory hash, uint mintGrant) 
+        public 
+        canSafeMint {
         addType(tokenType);
         mintBadge(to, tokenType, payload, hash, mintGrant);
     }
@@ -139,10 +163,12 @@ contract Remix is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable,
 
     function addTrainer (address trainer) public onlyRole(DEFAULT_ADMIN_ROLE) {
         trainers[trainer] = 1;
+        grantRole(TRAINER_ROLE, trainer);
     }
 
     function removeTrainer (address trainer) public onlyRole(DEFAULT_ADMIN_ROLE) {
         delete trainers[trainer];
+        revokeRole(TRAINER_ROLE, trainer);
     }
 
     function grantRemixersMinting (address[] calldata remixers, uint amount) public isTrainer()  {

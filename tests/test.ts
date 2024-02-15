@@ -87,7 +87,7 @@ describe("Basic minting", function () {
 
   it("Should not be allowed minting", async function () {
     const ipfsHash = '0xabcd1234'
-    await expect(remix.connect(betatester).safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)).to.be.revertedWith('is missing role 0x0000000000000000000000000000000000000000000000000000000000000000')
+    await expect(remix.connect(betatester).safeMint(betatester.address, 'Beta Tester', '0.22.0', ipfsHash, 2)).to.be.revertedWith('Caller is neither admin nor a challenge provider')
   });
 });
 
@@ -149,7 +149,7 @@ describe("Challenge", function () {
   })
 
   it("Should call the remix reward contract to set the correct permission to the challenges contract", async function () {
-    const tx = await remix.connect(owner).grantRole('0x0000000000000000000000000000000000000000000000000000000000000000', remixChallenges.address);
+    const tx = await remix.connect(owner).grantRole('0x0000000000000000000000000000000000000000000000000000000000000002', remixChallenges.address);
     await tx.wait()
   })
 

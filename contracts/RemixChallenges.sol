@@ -70,8 +70,13 @@ contract RemixChallenges is Initializable, AccessControlUpgradeable, UUPSUpgrade
         (bool verified) = abi.decode(data, (bool));        
         require(verified, "the provided proof isn't valid");        
         
+        challenge.publishersCount++;
+
+        nullifiers[nullifier] = 1;
+        publishers[publisher] = 1;
+
         // function safeMint(address to, string memory tokenType, string memory payload, bytes memory hash, uint mintGrant) public onlyRole(DEFAULT_ADMIN_ROLE)
-        (bool successMint,) = rewardContract.call{ value: 0 }(
+        (bool successMint, bytes memory dataMint) = rewardContract.call{ value: 0 }(
             abi.encodeWithSignature("safeMint(address,string,string,bytes,uint256)", 
                 msg.sender, 
                 challenge.tokenType,
@@ -81,11 +86,12 @@ contract RemixChallenges is Initializable, AccessControlUpgradeable, UUPSUpgrade
             )
         );
 
-        challenge.publishersCount++;
-
-        nullifiers[nullifier] = 1;
-        publishers[publisher] = 1;
-        require(successMint, "the call to the minter failed");
+        if (!successMint) {
+            if (dataMint.length == 0) revert();
+            assembly {
+                revert(add(32, dataMint), mload(dataMint))
+            }
+        }
     }
 
     function _authorizeUpgrade(address newImplementation) internal override   {
