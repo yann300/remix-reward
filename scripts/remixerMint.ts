@@ -1,9 +1,10 @@
 import { ethers } from 'ethers'
+import { getRewardAddress } from './contract_addresses'
 
 async function main() {
     try {        
         // proxy on Optimism.
-        const address = "0x5d470270e889b61c08C51784cDC73442c4554011"
+        const address = await getRewardAddress()
 
         // "signer" represents the current selected account and provider.
         const signer = (new ethers.providers.Web3Provider(web3Provider)).getSigner()

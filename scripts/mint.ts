@@ -1,5 +1,6 @@
 import * as multihash from 'multihashes'
 import { ethers } from 'ethers'
+import { getRewardAddress } from './contract_addresses'
 
 const toHex = (ipfsHash) => {
     let buf = multihash.fromB58String(ipfsHash);
@@ -14,7 +15,7 @@ const toBase58 = (contentHash) => {
 
 async function main() {
     try {        
-        const address = "0x5d470270e889b61c08C51784cDC73442c4554011" // proxy on Optimism
+        const address = await getRewardAddress()
 
         const signer = (new ethers.providers.Web3Provider(web3Provider)).getSigner()
         const remixV1 = await ethers.getContractFactory("Remix")
