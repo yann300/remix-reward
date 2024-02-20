@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { getRewardAddress } from './contract_addresses'
 
 async function main() {
     const [owner] = await ethers.getSigners();
@@ -10,7 +11,7 @@ async function main() {
     const implAddress = implRemix.address
     console.log('implementation address', implAddress)
 
-    const proxyAddress = '0xf8e81D47203A594245E36C48e151709F0C19fBe8'
+    const proxyAddress = await getRewardAddress()
     const remix = await ethers.getContractAt("Remix", proxyAddress)
     const updated = await remix.connect(owner).upgradeTo(implAddress)
     updated.wait()
